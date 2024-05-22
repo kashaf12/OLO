@@ -14,7 +14,7 @@
       [
         "expo-dev-launcher",
         {
-          "launchModeExperimental": "most-recent"
+          "launchMode": "most-recent"
         }
       ]
     ],
@@ -28,11 +28,9 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#002f34"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.kashaf.olo"
