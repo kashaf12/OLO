@@ -7,31 +7,31 @@ import {
 } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 
-import { SCREEN, TAB_LABELS } from '@/constants';
-import { colors, scale, fontStyles } from '@/utils';
+import { COLORS, FONT_STYLES, TAB_SCREENS, TAB_LABELS } from '@/constants';
+import { scale } from '@/utils';
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.fontSecondColor,
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: COLORS.fontSecondColor,
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
-          backgroundColor: colors.bottomTabColor,
+          backgroundColor: COLORS.bottomTabColor,
         },
         tabBarLabelStyle: {
-          fontFamily: fontStyles.Bold,
+          fontFamily: FONT_STYLES.Bold,
           justifyContent: 'center',
         },
         tabBarItemStyle: {
-          backgroundColor: colors.bottomTabColor,
+          backgroundColor: COLORS.bottomTabColor,
           justifyContent: 'center',
           alignItems: 'center',
         },
       }}>
       <Tabs.Screen
-        name={SCREEN.HOME}
+        name={TAB_SCREENS.HOME}
         options={{
           tabBarLabel: TAB_LABELS.HOME,
           tabBarIcon: ({ color, focused }) =>
@@ -43,7 +43,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name={SCREEN.CHAT}
+        name={TAB_SCREENS.CHAT}
         options={{
           tabBarLabel: TAB_LABELS.CHAT,
           tabBarIcon: ({ color, focused }) =>
@@ -55,7 +55,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name={SCREEN.SELL}
+        name={TAB_SCREENS.SELL}
         options={{
           tabBarLabel: TAB_LABELS.SELL,
           tabBarIcon: ({ color, focused }) =>
@@ -67,7 +67,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name={SCREEN.ADS}
+        name={TAB_SCREENS.ADS}
         options={{
           tabBarLabel: TAB_LABELS.ADS,
           tabBarIcon: ({ color, focused }) =>
@@ -79,7 +79,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name={SCREEN.PROFILE}
+        name={TAB_SCREENS.PROFILE}
         options={{
           tabBarLabel: TAB_LABELS.PROFILE,
           tabBarIcon: ({ color, focused }) =>

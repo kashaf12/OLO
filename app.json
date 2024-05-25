@@ -16,6 +16,18 @@
         {
           "launchMode": "most-recent"
         }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "node_modules/@expo-google-fonts/roboto/Roboto_100Thin.ttf",
+            "node_modules/@expo-google-fonts/roboto/Roboto_300Light.ttf",
+            "node_modules/@expo-google-fonts/roboto/Roboto_400Regular.ttf",
+            "node_modules/@expo-google-fonts/roboto/Roboto_500Medium.ttf",
+            "node_modules/@expo-google-fonts/roboto/Roboto_700Bold.ttf"
+          ]
+        }
       ]
     ],
     "experiments": {

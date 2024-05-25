@@ -1,5 +1,6 @@
-import { fontStyles } from './fontStyles';
 import { scale } from './scaling';
+
+import { FONT_STYLES } from '@/constants';
 
 export const textStyles = {
   H1: {
@@ -24,19 +25,19 @@ export const textStyles = {
     fontSize: scale(10),
   },
   Thin: {
-    fontFamily: fontStyles.Thin,
+    fontFamily: FONT_STYLES.Thin,
   },
   Light: {
-    fontFamily: fontStyles.Light,
+    fontFamily: FONT_STYLES.Light,
   },
   Regular: {
-    fontFamily: fontStyles.Regular,
+    fontFamily: FONT_STYLES.Regular,
   },
   Bold: {
-    fontFamily: fontStyles.Bold,
+    fontFamily: FONT_STYLES.Bold,
   },
   Bolder: {
-    fontFamily: fontStyles.Bolder,
+    fontFamily: FONT_STYLES.Bolder,
   },
   Center: {
     textAlign: 'center',

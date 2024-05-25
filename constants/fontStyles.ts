@@ -1,4 +1,4 @@
-export const fontStyles = {
+export const FONT_STYLES = {
   Thin: 'Thin',
   Light: 'Light',
   Regular: 'Regular',
