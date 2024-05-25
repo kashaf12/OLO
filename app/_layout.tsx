@@ -1,5 +1,8 @@
 import { SplashScreen, Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
+
+import { colors } from '@/utils';
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -24,14 +27,18 @@ export default function ApplicationNavigator() {
     return null;
   }
 
-  return <MainNavigationStack />;
+  return (
+    <>
+      <StatusBar style="dark" backgroundColor={colors.primary} />
+      <MainNavigationStack />
+    </>
+  );
 }
 
 function MainNavigationStack() {
   return (
-    <Stack>
+    <Stack initialRouteName="(tabs)">
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
     </Stack>
   );
 }
