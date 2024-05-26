@@ -1,9 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { COLORS } from '@/constants';
+import { TextErrorProps } from './TextError.types';
+import TextDefault from '../TextDefault';
 
-import TextDefault from '../TextDefault/TextDefault';
+import { COLORS } from '@/constants';
 
 function TextError(props: TextErrorProps) {
   return (
@@ -12,7 +13,7 @@ function TextError(props: TextErrorProps) {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: props.backColor ? props.backColor : COLORS.containerDark,
+        backgroundColor: props.backColor ? props.backColor : COLORS.dark,
       }}>
       <TextDefault
         style={props.style}
@@ -26,10 +27,4 @@ function TextError(props: TextErrorProps) {
   );
 }
 
-type TextErrorProps = {
-  text: string;
-  backColor: string;
-  textColor: string;
-  style: any;
-};
 export default TextError;

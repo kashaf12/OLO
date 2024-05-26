@@ -1,17 +1,19 @@
-import { ReactNode } from 'react';
 import { Text, StyleSheet } from 'react-native';
 
+import { TextDefaultProps } from './TextDefault.types';
 import color from './styles';
 
 import { COLORS } from '@/constants';
-import { textStyles } from '@/utils';
+import { FONT_FAMILY, FONT_SIZE, textStyles } from '@/utils';
 
 function TextDefault(props: TextDefaultProps) {
   const textColor = props.textColor ? props.textColor : COLORS.fontMainColor;
   const defaultStyle = StyleSheet.flatten([
     color(textColor).color,
-    textStyles.Regular,
-    textStyles.Normal,
+    {
+      fontFamily: FONT_FAMILY.REGULAR,
+      fontSize: FONT_SIZE.NORMAL,
+    },
   ]);
   let customStyles = [defaultStyle];
 
@@ -38,24 +40,4 @@ function TextDefault(props: TextDefaultProps) {
   );
 }
 
-type TextDefaultProps = {
-  bold: boolean;
-  bolder: boolean;
-  center: boolean;
-  right: boolean;
-  small: boolean;
-  H5: boolean;
-  H4: boolean;
-  H3: boolean;
-  H2: boolean;
-  H1: boolean;
-  uppercase: boolean;
-  numberOfLines: number;
-  textColor: string;
-  style: any;
-  children: ReactNode;
-  thin: boolean;
-  light: boolean;
-  onPress: () => void;
-};
 export default TextDefault;

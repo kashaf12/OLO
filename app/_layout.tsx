@@ -1,10 +1,9 @@
-import { SplashScreen, Stack, useRouter } from 'expo-router';
+import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { BackHandler } from 'react-native';
 
 import { COLORS } from '@/constants';
-import { useLocationStore } from '@/store';
 import { exitAlert } from '@/utils';
 
 export const unstable_settings = {
@@ -48,19 +47,9 @@ export default function ApplicationNavigator() {
 }
 
 function MainNavigationStack() {
-  // const use;
-  const location = useLocationStore((state) => state.location);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!location) {
-      router.push('(location)');
-    }
-  }, [location]);
-
   return (
     <Stack>
-      <Stack.Screen name="(location)" />
+      <Stack.Screen name="(location)" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
   );

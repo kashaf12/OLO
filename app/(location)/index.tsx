@@ -1,100 +1,60 @@
+import { PermissionStatus } from 'expo-location';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import LocationPermission from '@/components/LocationPermission';
-import { COLORS } from '@/constants';
-import { scale, alignment } from '@/utils';
+import { COLORS, LOCATION_SCREENS } from '@/constants';
+import { useLocationPermission } from '@/hooks';
+import { CurrentLocation } from '@/screens';
 
-function CurrentLocation() {
+function Page() {
   const inset = useSafeAreaInsets();
-  console.log(inset);
+  const router = useRouter();
+  const { getCurrentLocation, getLocationPermission } = useLocationPermission();
+
+  const setCurrentLocation = async () => {
+    const locationPermission = await getLocationPermission();
+
+    console.log(locationPermission);
+    const { status, canAskAgain } = locationPermission;
+    if (status !== PermissionStatus.GRANTED && !canAskAgain) {
+      // FlashMessage({
+      //   message:
+      //     'Tap on this message to open Settings then allow app to use location from permissions.',
+      //   onPress: async () => {
+      //     await Linking.openSettings();
+      //   },
+      // });
+      return;
+    }
+    const { error, coords, message } = await getCurrentLocation();
+    console.log({ error, coords, message });
+    // if (error) {
+    //   FlashMessage({
+    //     message,
+    //   });
+    //   return;
+    // }
+    router.navigate({
+      pathname: LOCATION_SCREENS.SELECT_LOCATION,
+      params: coords,
+    });
+  };
   return (
-    <SafeAreaView>
-      <View
-        style={[
-          styles.flex,
-          {
-            backgroundColor: COLORS.selectedText,
-            paddingTop: inset.top,
-          },
-        ]}>
-        <View style={[styles.flex, styles.screenBackground]}>
-          <View style={styles.subContainerImage}>
-            <View style={styles.imageContainer}>
-              <LocationPermission width={scale(300)} height={scale(300)} />
-            </View>
-            <View style={styles.descriptionEmpty}>
-              {/* <TextDefault textColor={colors.themeBackground} bolder center>
-                {'Olo uses your location to show the products near you!'}
-              </TextDefault> */}
-            </View>
-            {/* <TouchableOpacity
-              activeOpacity={0.7}
-              style={styles.emptyButton}
-              onPress={setCurrentLocation}>
-              <TextDefault textColor={'#fff'} bolder center uppercase>
-                {'use current location'}
-              </TextDefault>
-            </TouchableOpacity> */}
-          </View>
-          {/* <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.linkButton}
-            onPress={() => {
-              navigation.navigate('SelectLocation');
-            }}>
-            <TextDefault textColor={colors.white} H5 bold center>
-              {'Select another location'}
-            </TextDefault>
-          </TouchableOpacity> */}
-        </View>
-      </View>
-      <View style={{ paddingBottom: inset.bottom }} />
-    </SafeAreaView>
+    <>
+      <StatusBar style="light" />
+      <CurrentLocation
+        style={{
+          backgroundColor: COLORS.selectedText,
+          paddingTop: inset.top,
+          paddingBottom: inset.bottom,
+        }}
+        onPressSetCurrentLocation={setCurrentLocation}
+        onPressSelectLocation={() => router.navigate(LOCATION_SCREENS.SELECT_LOCATION)}
+      />
+    </>
   );
 }
 
-const styles = StyleSheet.create({
-  flex: {
-    flex: 1,
-  },
-  screenBackground: {
-    backgroundColor: '#FFF',
-  },
-  subContainerImage: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  imageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...alignment.MBlarge,
-  },
-  image: {
-    width: scale(100),
-    height: scale(100),
-  },
-  descriptionEmpty: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...alignment.Plarge,
-  },
-  emptyButton: {
-    width: '80%',
-    height: '5%',
-    backgroundColor: COLORS.spinnerColor1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-  },
-  linkButton: {
-    ...alignment.Pmedium,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-});
-
-export default CurrentLocation;
+export default Page;

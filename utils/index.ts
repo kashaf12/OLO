@@ -5,7 +5,7 @@ import {
   exitAlert,
 } from './androidBackButton';
 import { scale, verticalScale, moderateScale } from './scaling';
-import { textStyles } from './textStyles';
+import { textStyles, FONT_ALIGN, FONT_FAMILY, FONT_SIZE } from './textStyles';
 
 export {
   scale,
@@ -16,4 +16,7 @@ export {
   removeAndroidBackButtonHandler,
   exitAlert,
   alignment,
+  FONT_ALIGN,
+  FONT_FAMILY,
+  FONT_SIZE,
 };

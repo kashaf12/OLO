@@ -28,6 +28,12 @@
             "node_modules/@expo-google-fonts/roboto/Roboto_700Bold.ttf"
           ]
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
       ]
     ],
     "experiments": {
