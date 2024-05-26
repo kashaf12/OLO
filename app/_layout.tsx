@@ -1,7 +1,8 @@
-import { SplashScreen, Stack } from 'expo-router';
+import { Slot, SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { BackHandler } from 'react-native';
+import FlashMessage from 'react-native-flash-message';
 
 import { COLORS } from '@/constants';
 import { exitAlert } from '@/utils';
@@ -41,16 +42,8 @@ export default function ApplicationNavigator() {
   return (
     <>
       <StatusBar style="dark" backgroundColor={COLORS.primary} />
-      <MainNavigationStack />
+      <Slot />
+      <FlashMessage position="top" />
     </>
-  );
-}
-
-function MainNavigationStack() {
-  return (
-    <Stack>
-      <Stack.Screen name="(location)" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
   );
 }

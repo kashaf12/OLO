@@ -33,7 +33,7 @@ function CurrentLocation({
               <LocationPermission width={scale(300)} height={scale(300)} />
             </View>
             <View style={styles.descriptionEmpty}>
-              <TextDefault textColor={COLORS.themeBackground} bolder center>
+              <TextDefault textColor={COLORS.dark} bolder center>
                 Olo uses your location to show the products near you!
               </TextDefault>
             </View>
@@ -50,7 +50,7 @@ function CurrentLocation({
             activeOpacity={0.7}
             style={styles.linkButton}
             onPress={onPressSelectLocation}>
-            <TextDefault textColor={COLORS.white} H5 bold center>
+            <TextDefault textColor={COLORS.dark} H5 bold center>
               Select another location
             </TextDefault>
           </TouchableOpacity>

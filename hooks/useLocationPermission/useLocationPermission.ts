@@ -17,7 +17,7 @@ export default function useLocationPermission() {
         if (e instanceof Error) {
           return { error: true, message: e.message };
         }
-        return { error: true, message: 'Failed to retrieve location' };
+        return { error: true, message: 'Failed to retrieve location', coords: null };
       }
     }
     return { error: true, message: 'Location permission was not granted' };

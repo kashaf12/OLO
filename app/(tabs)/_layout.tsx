@@ -5,12 +5,18 @@ import {
   MaterialCommunityIcons,
   SimpleLineIcons,
 } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
 
 import { COLORS, FONT_STYLES, TAB_SCREENS, TAB_LABELS } from '@/constants';
+import { useLocationStore } from '@/store';
 import { scale } from '@/utils';
 
 export default function TabLayout() {
+  const location = useLocationStore((state) => state.location);
+
+  if (!location) {
+    return <Redirect href="(location)" />;
+  }
   return (
     <Tabs
       screenOptions={{
