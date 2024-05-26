@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 import { COLORS } from '@/constants';
+import { horizontalScale, verticalScale } from '@/utils';
 
 const styles = StyleSheet.create({
   flex: {
@@ -19,6 +20,22 @@ const styles = StyleSheet.create({
     height: '100%',
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.2)',
+  },
+  locateBtn: {
+    position: 'absolute',
+    top: verticalScale(10),
+    right: horizontalScale(20),
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 10,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: {
+      width: 1,
+      height: 10,
+    },
   },
 });
 

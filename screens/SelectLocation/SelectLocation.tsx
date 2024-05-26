@@ -1,34 +1,64 @@
-import { forwardRef } from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { Ionicons } from '@expo/vector-icons';
+import { LocationObjectCoords, PermissionStatus } from 'expo-location';
+import { useRef } from 'react';
+import { Linking, TouchableOpacity, View } from 'react-native';
+import MapView, { PROVIDER_DEFAULT } from 'react-native-maps';
 
 import { SelectLocationProps } from './SelectLocation.types';
 import styles, { mapStyle } from './styles';
 
-import { TextDefault } from '@/components';
+import { CustomMarker, FlashMessage, TextDefault } from '@/components';
 import { COLORS } from '@/constants';
+import { useLocationPermission } from '@/hooks';
 
-function SelectLocation(
-  {
-    onPanDrag,
-    onRegionChangeComplete,
-    inset,
-    coordinates,
-    onPressSelectLocation,
-  }: SelectLocationProps,
-  ref: React.LegacyRef<MapView>
-) {
+const SelectLocation = ({
+  onPanDrag,
+  onRegionChangeComplete,
+  inset,
+  coordinates,
+  onPressSelectLocation,
+  setLabel,
+}: SelectLocationProps) => {
+  const mapRef = useRef<MapView>(null);
+  const { getCurrentLocation, getLocationPermission } = useLocationPermission();
+
+  const setCurrentLocation = async () => {
+    const { status, canAskAgain } = await getLocationPermission();
+    if (status !== PermissionStatus.GRANTED && !canAskAgain) {
+      FlashMessage({
+        message:
+          'Tap on this message to open Settings then allow app to use location from permissions.',
+        onPress: async () => {
+          await Linking.openSettings();
+        },
+      });
+      return;
+    }
+    const { error, coords, message } = await getCurrentLocation();
+    if (error) {
+      FlashMessage({
+        message: message ?? 'Could not get location',
+      });
+      return;
+    }
+    mapRef?.current?.fitToCoordinates([
+      {
+        latitude: (coords as LocationObjectCoords).latitude,
+        longitude: (coords as LocationObjectCoords).longitude,
+      },
+    ]);
+    setLabel('Current Location');
+  };
+
   return (
     <>
       <View style={styles.flex}>
         <MapView
-          ref={ref}
+          ref={mapRef}
           initialRegion={coordinates}
-          // region={coordinates}
           style={{ height: '92%' }}
-          provider={PROVIDER_GOOGLE}
+          provider={PROVIDER_DEFAULT}
           showsTraffic={false}
-          maxZoomLevel={15}
           customMapStyle={mapStyle}
           onRegionChangeComplete={onRegionChangeComplete}
           onPanDrag={onPanDrag}
@@ -47,8 +77,11 @@ function SelectLocation(
             alignItems: 'center',
             transform: [{ translateX: -25 }, { translateY: -25 }],
           }}>
-          {/* <CustomMarker width={40} height={40} transform={[{ translateY: -20 }]} translateY={-20} /> */}
+          <CustomMarker width={40} height={40} transform={[{ translateY: -20 }]} translateY={-20} />
         </View>
+        <TouchableOpacity style={styles.locateBtn} onPress={setCurrentLocation}>
+          <Ionicons name="navigate" size={24} color={COLORS.dark} />
+        </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.7} style={styles.button} onPress={onPressSelectLocation}>
           <TextDefault textColor={COLORS.buttonText} H4 bold>
             Select Location
@@ -58,6 +91,6 @@ function SelectLocation(
       <View style={{ paddingBottom: inset.bottom }} />
     </>
   );
-}
+};
 
-export default forwardRef(SelectLocation);
+export default SelectLocation;

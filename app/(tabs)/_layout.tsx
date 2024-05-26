@@ -12,9 +12,9 @@ import { useLocationStore } from '@/store';
 import { scale } from '@/utils';
 
 export default function TabLayout() {
-  const location = useLocationStore((state) => state.location);
+  const locationIsSet = useLocationStore((state) => state.isSet);
 
-  if (!location) {
+  if (!locationIsSet) {
     return <Redirect href="(location)" />;
   }
   return (

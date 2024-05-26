@@ -9,16 +9,13 @@ const locationStorage = new MMKV({
 
 export const locationStateStorage: StateStorage = {
   setItem: (name, value) => {
-    console.log('setItem', name, value);
     return locationStorage.set(name, value);
   },
   getItem: (name) => {
-    console.log('getItem', name);
     const value = locationStorage.getString(name);
     return value ?? null;
   },
   removeItem: (name) => {
-    console.log('removeItem', name);
     return locationStorage.delete(name);
   },
 };

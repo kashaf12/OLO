@@ -7,4 +7,5 @@ export type SelectLocationProps = {
   inset: EdgeInsets;
   coordinates: MapViewProps['initialRegion'];
   onPressSelectLocation: () => void;
+  setLabel: (label: string) => void;
 };

@@ -1,103 +1,48 @@
-import { useLocalSearchParams, useNavigation } from 'expo-router';
-import React, { useLayoutEffect, useRef, useState } from 'react';
-
-import { useLocationPermission } from '@/hooks';
-import { SelectLocation } from '@/screens';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useLocationStore } from '@/store';
-import MapView from 'react-native-maps';
-import { COLORS } from '@/constants';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { FlashMessage } from '@/components';
-import { PermissionStatus } from 'expo-location';
-import { Linking } from 'react-native';
+import React, { useState } from 'react';
+import { Region } from 'react-native-maps';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const LATITUDE = 33.699265;
-const LONGITUDE = 72.974575;
+import { SelectLocation } from '@/screens';
+import { useLocationStore } from '@/store';
+
+const LATITUDE = 26.867287853605735;
+const LONGITUDE = 80.95443866441771;
 const LATITUDE_DELTA = 40;
 const LONGITUDE_DELTA = 40;
 
 function Page() {
   const { longitude, latitude } = useLocalSearchParams();
-
-  const navigation = useNavigation();
+  const router = useRouter();
   const inset = useSafeAreaInsets();
-  const { getCurrentLocation, getLocationPermission } = useLocationPermission();
-
-  const setLocation = useLocationStore();
+  const setLocation = useLocationStore((state) => state.setLocation);
   const [label, setLabel] = useState(
     longitude && latitude ? 'Current Location' : 'Selected Location'
   );
-
   const [coordinates, setCorrdinates] = useState({
-    latitude: latitude || LATITUDE,
-    longitude: longitude || LONGITUDE,
-    latitudeDelta: latitude ? 0.003 : LATITUDE_DELTA,
-    longitudeDelta: longitude ? 0.003 : LONGITUDE_DELTA,
-  });
-  const mapRef = useRef<MapView>();
-
-  useLayoutEffect(() => {
-    // navigation
-    navigation.setOptions({
-      title: 'Set Location',
-      fontColor: COLORS.fontMainColor,
-      backColor: COLORS.white,
-      iconColor: COLORS.fontThirdColor,
-      lineColor: COLORS.lightHorizontalLine,
-      setCurrentLocation,
-    });
+    latitude: Number(latitude) || LATITUDE,
+    longitude: Number(longitude) || LONGITUDE,
+    latitudeDelta: Number(latitude) ? 0.003 : LATITUDE_DELTA,
+    longitudeDelta: Number(longitude) ? 0.003 : LONGITUDE_DELTA,
   });
 
-  const setCurrentLocation = async () => {
-    const { status, canAskAgain } = await getLocationPermission();
-    if (status !== PermissionStatus.GRANTED && !canAskAgain) {
-      FlashMessage({
-        message:
-          'Tap on this message to open Settings then allow app to use location from permissions.',
-        onPress: async () => {
-          await Linking.openSettings();
-        },
-      });
-      return;
-    }
-    const { error, coords, message } = await getCurrentLocation();
-    if (error) {
-      FlashMessage({
-        message: message ?? 'Could not get location',
-      });
-      return;
-    }
-    mapRef?.current?.fitToCoordinates([
-      {
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      },
-    ]);
-    setLabel('Current Location');
-  };
   const onSelectLocation = () => {
-    console.log({
-      label,
-      deliveryAddress: label,
-      latitude: coordinates.latitude,
-      longitude: coordinates.longitude,
-    });
     setLocation({
       label,
-      deliveryAddress: label,
+      address: label,
       latitude: coordinates.latitude,
       longitude: coordinates.longitude,
     });
+    router.replace('(tabs)');
   };
-  const onRegionChangeComplete = (coordinates) => {
+  const onRegionChangeComplete = (coordinates: Region) => {
     setCorrdinates({
       ...coordinates,
     });
   };
 
-  const onPanDrag = (event) => {
-    console.log({ event });
+  const onPanDrag = () => {
     setLabel('Selected Location');
   };
 
@@ -106,11 +51,11 @@ function Page() {
       <StatusBar style="dark" />
       <SelectLocation
         inset={inset}
-        ref={ref}
         onPanDrag={onPanDrag}
         onPressSelectLocation={onSelectLocation}
         onRegionChangeComplete={onRegionChangeComplete}
         coordinates={coordinates}
+        setLabel={setLabel}
       />
     </>
   );
