@@ -1,6 +1,6 @@
 export const TAB_SCREENS = {
   HOME: 'index',
-  CHAT: 'chat',
+  CHAT: '(chat)',
   SELL: 'sell',
   ADS: 'ads',
   PROFILE: 'profile',
@@ -9,4 +9,9 @@ export const TAB_SCREENS = {
 export const LOCATION_SCREENS = {
   CURRENT_LOCATION: 'index',
   SELECT_LOCATION: 'selectLocation',
+};
+
+export const CHAT_SCREENS = {
+  MAIN_CHAT: 'index',
+  LIVE_CHAT: 'liveChat',
 };

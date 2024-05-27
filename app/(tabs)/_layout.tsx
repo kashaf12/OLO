@@ -35,6 +35,7 @@ export default function TabLayout() {
           justifyContent: 'center',
           alignItems: 'center',
         },
+        headerShown: false,
       }}>
       <Tabs.Screen
         name={TAB_SCREENS.HOME}

@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 const Chat = () => {
   return (
     <View>
-      <Text>Chat</Text>
+      <Text>New </Text>
     </View>
   );
 };
