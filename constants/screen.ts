@@ -12,6 +12,12 @@ export const LOCATION_SCREENS = {
 };
 
 export const CHAT_SCREENS = {
-  MAIN_CHAT: 'index',
+  MAIN_CHAT: '(inbox-tabs)',
   LIVE_CHAT: 'liveChat',
+};
+
+export const INBOX_SCREENS = {
+  ALL: 'index',
+  BUYING: 'buying',
+  SELLING: 'selling',
 };

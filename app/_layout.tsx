@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { BackHandler } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { COLORS } from '@/constants';
 import { exitAlert } from '@/utils';
@@ -41,9 +42,11 @@ export default function ApplicationNavigator() {
 
   return (
     <>
-      <StatusBar style="dark" backgroundColor={COLORS.primary} />
-      <Slot />
-      <FlashMessage position="top" />
+      <GestureHandlerRootView>
+        <StatusBar style="dark" backgroundColor={COLORS.primary} />
+        <Slot />
+        <FlashMessage position="top" />
+      </GestureHandlerRootView>
     </>
   );
 }

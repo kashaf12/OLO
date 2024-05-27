@@ -8,7 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BackButtonProps, LeftButtonProps, RightButtonProps } from './HeaderIcons.types';
 import styles from './styles';
 
-import { TextDefault } from '@/components';
+import { TextDefault } from '@/components/Text';
 import { COLORS } from '@/constants';
 import { alignment, scale } from '@/utils';
 
