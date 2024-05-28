@@ -86,9 +86,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name={TAB_SCREENS.PROFILE}
+        name={TAB_SCREENS.ACCOUNT}
         options={{
-          tabBarLabel: TAB_LABELS.PROFILE,
+          tabBarLabel: TAB_LABELS.ACCOUNT,
           tabBarIcon: ({ color, focused }) =>
             focused ? (
               <FontAwesome5 name="user-alt" size={scale(25)} color={color} />

@@ -3,5 +3,5 @@ export const TAB_LABELS = {
   CHAT: 'CHATS',
   SELL: 'SELL',
   ADS: 'MY ADS',
-  PROFILE: 'PROFILE',
+  ACCOUNT: 'ACCOUNT',
 };

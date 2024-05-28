@@ -3,7 +3,7 @@ export const TAB_SCREENS = {
   CHAT: '(chat)',
   SELL: 'sell',
   ADS: 'ads',
-  PROFILE: 'profile',
+  ACCOUNT: '(account)',
 };
 
 export const LOCATION_SCREENS = {
@@ -20,4 +20,20 @@ export const INBOX_SCREENS = {
   ALL: 'index',
   BUYING: 'buying',
   SELLING: 'selling',
+};
+
+export const ACCOUNT_SCREENS = {
+  MAIN_ACCOUNT: 'index',
+  HELP: 'help',
+  SETTINGS: 'settings',
+  PROFILE: 'profile',
+  PRIVACY: 'privacy',
+  NOTIFICATIONS: 'notifications',
+  HELP_BROWSER: 'helpBrowser',
+  NETWORK: '(network-tabs)',
+};
+
+export const NETWORK_SCREENS = {
+  FOLLOWING: 'index',
+  FOLLOWERS: 'followers',
 };
