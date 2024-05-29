@@ -46,7 +46,7 @@ function Following({ onPressShare }: FollowingProps) {
   return (
     <View style={[styles.flex, styles.mainContainer]}>
       <FlashList
-        style={styles.flex}
+        // style={styles.flex}
         // contentContainerStyle={[styles.mainContainer, { flexGrow: 1 }]}
         data={[]}
         ListEmptyComponent={emptyView()}

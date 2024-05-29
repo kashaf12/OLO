@@ -6,8 +6,7 @@ import {
 import { ParamListBase, TabNavigationState } from '@react-navigation/native';
 import { withLayoutContext } from 'expo-router';
 
-import { COLORS } from '@/constants';
-import { NETWORK_SCREENS } from '@/constants/screen';
+import { COLORS, NETWORK_SCREENS } from '@/constants';
 import { scale } from '@/utils';
 
 const { Navigator } = createMaterialTopTabNavigator();

@@ -45,7 +45,7 @@ function Followers({ onPressShare }: FollowersProps) {
   return (
     <View style={[styles.flex, styles.mainContainer]}>
       <FlashList
-        style={styles.flex}
+        // contentContainerStyle={styles.flex}
         // contentContainerStyle={[styles.mainContainer, { flexGrow: 1 }]}
         data={[]}
         estimatedItemSize={20}

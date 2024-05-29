@@ -1,7 +1,7 @@
 export const TAB_SCREENS = {
   HOME: 'index',
   CHAT: '(chat)',
-  SELL: 'sell',
+  SELL: '(sell)',
   ADS: 'ads',
   ACCOUNT: '(account)',
 };
@@ -36,4 +36,21 @@ export const ACCOUNT_SCREENS = {
 export const NETWORK_SCREENS = {
   FOLLOWING: 'index',
   FOLLOWERS: 'followers',
+};
+
+export const SELL_SCREENS = {
+  SELL: 'index',
+  CATEGORIES: 'categories',
+  SUB_CATEGORIES: 'subCategories',
+  FULL_MAP: 'fullMap',
+  LOCATION_CONFIRM: 'locationConfirm',
+  PRICE: 'price',
+  SELLING_FORM: 'sellingForm',
+  UPLOAD_IMAGE: 'uploadImage',
+  PRODUCT_DESCRIPTION: '(product-description-tabs)',
+};
+
+export const PRODUCT_DESCRIPTION_SCREENS = {
+  PRODUCT_DESCRIPTION: 'index',
+  FULL_MAP: 'fullMap',
 };
