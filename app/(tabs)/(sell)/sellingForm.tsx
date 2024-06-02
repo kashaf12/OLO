@@ -1,12 +1,19 @@
+import { useRouter } from 'expo-router';
 import React from 'react';
-import { View, Text } from 'react-native';
+
+import { SELL_SCREENS } from '@/constants';
+import { SellingForm } from '@/screens';
 
 const Page = () => {
-  return (
-    <View>
-      <Text>Page</Text>
-    </View>
-  );
+  const router = useRouter();
+
+  const handleOnPressNext = () => {
+    router.navigate({
+      pathname: SELL_SCREENS.UPLOAD_IMAGE,
+    });
+  };
+
+  return <SellingForm onPressNext={handleOnPressNext} />;
 };
 
 export default Page;

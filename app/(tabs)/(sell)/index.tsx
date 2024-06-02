@@ -3,7 +3,7 @@ import React, { useLayoutEffect } from 'react';
 
 import { LeftButton } from '@/components';
 import { COLORS, SELL_SCREENS } from '@/constants';
-import { MainSell } from '@/screens';
+import { Categories } from '@/screens';
 
 const Page = () => {
   const navigation = useNavigation();
@@ -25,7 +25,9 @@ const Page = () => {
     });
   };
 
-  return <MainSell onPressCategory={handleOnPressCategory} />;
+  // return <MainSell onPressCategory={handleOnPressCategory} />;
+
+  return <Categories onPressCategory={handleOnPressCategory} />;
 };
 
 export default Page;

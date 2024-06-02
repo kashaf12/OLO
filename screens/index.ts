@@ -12,7 +12,15 @@ import {
 import { All, Buying, Selling } from './ChatStack';
 import CurrentLocation from './CurrentLocation';
 import SelectLocation from './SelectLocation';
-import { MainSell } from './SellStack';
+import {
+  Categories,
+  LocationConfirm,
+  MainSell,
+  Price,
+  SellingForm,
+  SubCategories,
+  UploadImages,
+} from './SellStack';
 
 export {
   CurrentLocation,
@@ -26,8 +34,14 @@ export {
   Profile,
   Privacy,
   Notifications,
+  SubCategories,
   HelpBrowser,
   Followers,
   Following,
   MainSell,
+  Categories,
+  SellingForm,
+  UploadImages,
+  Price,
+  LocationConfirm,
 };
