@@ -4,7 +4,7 @@ import CustomMarker from './CustomMarker';
 import FlashMessage from './FlashMessage';
 import { BackButton, LeftButton, RightButton, ModalHeader } from './Header';
 import LocationPermission from './LocationPermission';
-import { DeactivateModal, UnfollowModal, ZoneModal } from './Modal';
+import { AddFilter, DeactivateModal, UnfollowModal, ZoneModal } from './Modal';
 import { Spinner } from './Spinner';
 import { TextDefault, TextError } from './Text';
 
@@ -25,4 +25,5 @@ export {
   FollowingCard,
   ModalHeader,
   ZoneModal,
+  AddFilter,
 };

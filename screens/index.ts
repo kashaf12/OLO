@@ -9,6 +9,7 @@ import {
   Followers,
   Following,
 } from './AccountStack';
+import { Favourite, MainAds } from './AdsStack';
 import { All, Buying, Selling } from './ChatStack';
 import CurrentLocation from './CurrentLocation';
 import SelectLocation from './SelectLocation';
@@ -25,8 +26,10 @@ import {
 export {
   CurrentLocation,
   SelectLocation,
+  Favourite,
   All,
   Buying,
+  MainAds,
   Selling,
   MainAccount,
   Help,

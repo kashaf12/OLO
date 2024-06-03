@@ -2,7 +2,7 @@ export const TAB_SCREENS = {
   HOME: 'index',
   CHAT: '(chat)',
   SELL: '(sell)',
-  ADS: 'ads',
+  ADS: '(ads)',
   ACCOUNT: '(account)',
 };
 
@@ -14,6 +14,15 @@ export const LOCATION_SCREENS = {
 export const CHAT_SCREENS = {
   MAIN_CHAT: '(inbox-tabs)',
   LIVE_CHAT: 'liveChat',
+};
+
+export const ADS_SCREENS = {
+  MAIN_ADS: '(ads-tabs)',
+};
+
+export const ADS_TAB_SCREENS = {
+  ADS: 'index',
+  FAVOURITE: 'favourite',
 };
 
 export const INBOX_SCREENS = {

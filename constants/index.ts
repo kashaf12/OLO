@@ -9,6 +9,8 @@ import {
   NETWORK_SCREENS,
   PRODUCT_DESCRIPTION_SCREENS,
   SELL_SCREENS,
+  ADS_SCREENS,
+  ADS_TAB_SCREENS,
 } from './screen';
 import { SIZE } from './size';
 import { TAB_LABELS } from './tabLabels';
@@ -26,4 +28,6 @@ export {
   NETWORK_SCREENS,
   PRODUCT_DESCRIPTION_SCREENS,
   SELL_SCREENS,
+  ADS_SCREENS,
+  ADS_TAB_SCREENS,
 };
