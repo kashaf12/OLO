@@ -11,6 +11,7 @@ import {
   SELL_SCREENS,
   ADS_SCREENS,
   ADS_TAB_SCREENS,
+  HOME_SCREENS,
 } from './screen';
 import { SIZE } from './size';
 import { TAB_LABELS } from './tabLabels';
@@ -29,5 +30,6 @@ export {
   PRODUCT_DESCRIPTION_SCREENS,
   SELL_SCREENS,
   ADS_SCREENS,
+  HOME_SCREENS,
   ADS_TAB_SCREENS,
 };

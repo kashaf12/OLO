@@ -12,6 +12,7 @@ import {
 import { Favourite, MainAds } from './AdsStack';
 import { All, Buying, Selling } from './ChatStack';
 import CurrentLocation from './CurrentLocation';
+import { MainHome } from './HomeStack';
 import SelectLocation from './SelectLocation';
 import {
   Categories,
@@ -24,6 +25,7 @@ import {
 } from './SellStack';
 
 export {
+  MainHome,
   CurrentLocation,
   SelectLocation,
   Favourite,

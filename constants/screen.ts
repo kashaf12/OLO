@@ -1,5 +1,5 @@
 export const TAB_SCREENS = {
-  HOME: 'index',
+  HOME: '(home)',
   CHAT: '(chat)',
   SELL: '(sell)',
   ADS: '(ads)',
@@ -18,6 +18,10 @@ export const CHAT_SCREENS = {
 
 export const ADS_SCREENS = {
   MAIN_ADS: '(ads-tabs)',
+};
+
+export const HOME_SCREENS = {
+  MAIN: 'index',
 };
 
 export const ADS_TAB_SCREENS = {

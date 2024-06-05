@@ -2,13 +2,22 @@ import { EmptyButton } from './Buttons';
 import { FollowerCard, FollowingCard } from './Card';
 import CustomMarker from './CustomMarker';
 import FlashMessage from './FlashMessage';
-import { BackButton, LeftButton, RightButton, ModalHeader } from './Header';
+import { BackButton, LeftButton, RightButton, ModalHeader, MainHeader } from './Header';
 import LocationPermission from './LocationPermission';
-import { AddFilter, DeactivateModal, UnfollowModal, ZoneModal } from './Modal';
+import {
+  AddFilter,
+  DeactivateModal,
+  LocationModal,
+  SearchModal,
+  UnfollowModal,
+  ZoneModal,
+} from './Modal';
 import { Spinner } from './Spinner';
 import { TextDefault, TextError } from './Text';
 
 export {
+  SearchModal,
+  LocationModal,
   FlashMessage,
   TextDefault,
   TextError,
@@ -23,6 +32,7 @@ export {
   UnfollowModal,
   FollowerCard,
   FollowingCard,
+  MainHeader,
   ModalHeader,
   ZoneModal,
   AddFilter,
