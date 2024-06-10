@@ -1,23 +1,26 @@
-import { Slot, SplashScreen } from 'expo-router';
+import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { BackHandler } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { COLORS } from '@/constants';
+import { BASE_SCREENS, COLORS } from '@/constants';
 import { exitAlert } from '@/utils';
+import { useLocationStore } from '@/store';
 
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
+// export const unstable_settings = {
+//   // Ensure that reloading on `/modal` keeps a back button present.
+//   initialRouteName: '(tabs)',
+// };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function ApplicationNavigator() {
   const [isAppReady, setAppReady] = useState(false);
+  // const locationIsSet = useLocationStore((state) => state.isSet);
+  const locationIsSet = false;
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', exitAlert);
@@ -44,7 +47,30 @@ export default function ApplicationNavigator() {
     <>
       <GestureHandlerRootView>
         <StatusBar style="dark" backgroundColor={COLORS.primary} />
-        <Slot />
+        <Stack>
+          <Stack.Screen
+            name={BASE_SCREENS.AUTHENTICATION}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          {locationIsSet ? (
+            <Stack.Screen
+              name={BASE_SCREENS.TAB_SCREENS}
+              options={{
+                headerShown: false,
+              }}
+            />
+          ) : (
+            <Stack.Screen
+              name={BASE_SCREENS.LOCATION_SCREENS}
+              options={{
+                headerShown: false,
+              }}
+            />
+          )}
+        </Stack>
         <FlashMessage position="top" />
       </GestureHandlerRootView>
     </>

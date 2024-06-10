@@ -1,3 +1,4 @@
+import { Authentication } from './Authentication';
 import { Help } from './Help';
 import { HelpBrowser } from './HelpBrowser';
 import { MainAccount } from './MainAccount';
@@ -17,4 +18,5 @@ export {
   HelpBrowser,
   Followers,
   Following,
+  Authentication,
 };

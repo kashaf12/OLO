@@ -8,6 +8,7 @@ import {
   HelpBrowser,
   Followers,
   Following,
+  Authentication,
 } from './AccountStack';
 import { Favourite, MainAds } from './AdsStack';
 import { All, Buying, Selling } from './ChatStack';
@@ -25,6 +26,7 @@ import {
 } from './SellStack';
 
 export {
+  Authentication,
   MainHome,
   CurrentLocation,
   SelectLocation,

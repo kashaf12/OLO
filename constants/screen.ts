@@ -24,6 +24,12 @@ export const HOME_SCREENS = {
   MAIN: 'index',
 };
 
+export const BASE_SCREENS = {
+  AUTHENTICATION: 'index',
+  TAB_SCREENS: '(tabs)',
+  LOCATION_SCREENS: '(location)',
+};
+
 export const ADS_TAB_SCREENS = {
   ADS: 'index',
   FAVOURITE: 'favourite',

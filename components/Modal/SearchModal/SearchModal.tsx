@@ -4,8 +4,8 @@ import { Modal, SafeAreaView, TextInput, TouchableOpacity, View } from 'react-na
 
 import { SearchModalProps } from './SearchModal.types';
 import styles from './styles';
+import { TextDefault } from '../../Text';
 
-import { TextDefault } from '@/components';
 import { COLORS } from '@/constants';
 import { scale } from '@/utils';
 
