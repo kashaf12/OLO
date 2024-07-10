@@ -4,5 +4,8 @@ export type AuthenticationProps = {
     bottom: number;
     right: number;
   };
-  onPressSkip: () => void;
+  onPressSkip?: () => void;
+  onPressPhoneNumber?: (number: string) => void;
+  onPressGoogle?: () => void;
+  isGoogleSignInLoading?: boolean;
 };

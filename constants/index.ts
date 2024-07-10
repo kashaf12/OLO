@@ -13,6 +13,7 @@ import {
   ADS_TAB_SCREENS,
   HOME_SCREENS,
   BASE_SCREENS,
+  AUTH_SCREENS,
 } from './screen';
 import { SIZE } from './size';
 import { TAB_LABELS } from './tabLabels';
@@ -34,4 +35,5 @@ export {
   HOME_SCREENS,
   ADS_TAB_SCREENS,
   BASE_SCREENS,
+  AUTH_SCREENS,
 };

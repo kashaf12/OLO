@@ -1,37 +1,69 @@
-import { COLORS } from '@/constants';
-import { scale, alignment } from '@/utils';
+import { StyleSheet, Dimensions } from 'react-native';
 
-const { StyleSheet, Dimensions } = require('react-native');
+import { COLORS } from '@/constants';
+import { scale } from '@/utils';
+
 const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
-  safeAreaViewStyles: {
+  safeAreaView: {
+    flex: 1,
     backgroundColor: COLORS.headerbackground,
-    overflow: 'hidden',
+  },
+  scrollViewContent: {
+    flexGrow: 1,
   },
   mainContainer: {
+    flex: 1,
     backgroundColor: COLORS.themeBackground,
   },
+  skipButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: scale(10),
+    backgroundColor: COLORS.headerbackground,
+  },
   logoContainer: {
-    height: height * 0.5,
+    height: height * 0.3,
     backgroundColor: COLORS.headerbackground,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonContainer: {
+  imageWrapper: {
+    width: scale(200),
+    height: scale(100),
+  },
+  appIcon: {
     flex: 1,
-    justifyContent: 'center',
+    width: undefined,
+    height: undefined,
+  },
+  authenticationContainer: {
+    flex: 1,
     alignItems: 'center',
+    gap: scale(10),
+    paddingVertical: scale(10),
     backgroundColor: COLORS.buttonbackground,
+  },
+  phoneInputContainer: {
+    width: '100%',
+    gap: scale(5),
+    alignItems: 'center',
+  },
+  phoneInputWidth: {
+    width: '85%',
   },
   footerContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.buttonbackground,
-    ...alignment.PBxSmall,
+    paddingVertical: scale(10),
+  },
+  underlinedText: {
+    textDecorationLine: 'underline',
   },
   appleBtn: {
     width: '85%',
@@ -42,14 +74,6 @@ const styles = StyleSheet.create({
     fontSize: scale(52),
     letterSpacing: scale(5),
   },
-  image: {
-    width: scale(200),
-    height: scale(100),
-  },
-  imgResponsive: {
-    flex: 1,
-    width: undefined,
-    height: undefined,
-  },
 });
+
 export default styles;

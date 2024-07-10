@@ -7,5 +7,5 @@ export type LoginButtonProps = {
   style?: ViewStyle;
   disabled?: boolean;
   loading?: boolean;
-  icon: string;
+  icon?: string;
 };

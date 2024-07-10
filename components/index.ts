@@ -11,7 +11,9 @@ import {
   SearchModal,
   UnfollowModal,
   ZoneModal,
+  LoadingModal,
 } from './Modal';
+import { PhoneNumberInput } from './PhoneNumberInput';
 import { Spinner } from './Spinner';
 import { TextDefault, TextError } from './Text';
 
@@ -38,4 +40,6 @@ export {
   ModalHeader,
   ZoneModal,
   AddFilter,
+  PhoneNumberInput,
+  LoadingModal,
 };

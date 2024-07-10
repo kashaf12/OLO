@@ -11,6 +11,11 @@ export const LOCATION_SCREENS = {
   SELECT_LOCATION: 'selectLocation',
 };
 
+export const AUTH_SCREENS = {
+  AUTH_PAGE: 'index',
+  OTP_PAGE: 'otp',
+};
+
 export const CHAT_SCREENS = {
   MAIN_CHAT: '(inbox-tabs)',
   LIVE_CHAT: 'liveChat',
@@ -25,7 +30,7 @@ export const HOME_SCREENS = {
 };
 
 export const BASE_SCREENS = {
-  AUTHENTICATION: 'index',
+  AUTHENTICATION: '(auth)',
   TAB_SCREENS: '(tabs)',
   LOCATION_SCREENS: '(location)',
 };

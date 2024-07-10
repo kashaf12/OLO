@@ -1,4 +1,4 @@
-import { SplashScreen, Stack } from 'expo-router';
+import { SplashScreen, Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { BackHandler } from 'react-native';
@@ -6,73 +6,63 @@ import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { BASE_SCREENS, COLORS } from '@/constants';
-import { exitAlert } from '@/utils';
+import { useAuth, useInitializeAuth } from '@/hooks';
 import { useLocationStore } from '@/store';
+import { exitAlert } from '@/utils';
 
-// export const unstable_settings = {
-//   // Ensure that reloading on `/modal` keeps a back button present.
-//   initialRouteName: '(tabs)',
-// };
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function ApplicationNavigator() {
+  useInitializeAuth(); // This will set up the auth listener
   const [isAppReady, setAppReady] = useState(false);
-  // const locationIsSet = useLocationStore((state) => state.isSet);
-  const locationIsSet = false;
+  const locationIsSet = useLocationStore((state) => state.isSet);
+  const { user, isLoading: authLoading } = useAuth();
+
+  const router = useRouter();
+  const segments = useSegments();
+
+  console.log({ user });
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', exitAlert);
-    //TODO: remove it
     setTimeout(() => setAppReady(true), 2000);
-    // setAppReady(true);
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', exitAlert);
     };
   }, []);
 
   useEffect(() => {
-    if (!isAppReady) return;
+    if (!isAppReady || authLoading) return;
+
     (async () => {
       await SplashScreen.hideAsync();
     })();
-  }, [isAppReady]);
 
-  if (!isAppReady) {
+    const inAuthGroup = segments[0] === BASE_SCREENS.AUTHENTICATION;
+    const inLocationGroup = segments[0] === BASE_SCREENS.LOCATION_SCREENS;
+
+    if (!user && !inAuthGroup) {
+      router.replace(BASE_SCREENS.AUTHENTICATION);
+    } else if (user && !locationIsSet && !inLocationGroup) {
+      router.replace(BASE_SCREENS.LOCATION_SCREENS);
+    } else if (user && locationIsSet && (inAuthGroup || inLocationGroup)) {
+      router.replace(BASE_SCREENS.TAB_SCREENS);
+    }
+  }, [isAppReady, authLoading, user, locationIsSet, segments]);
+
+  if (!isAppReady || authLoading) {
     return null;
   }
 
   return (
-    <>
-      <GestureHandlerRootView>
-        <StatusBar style="dark" backgroundColor={COLORS.primary} />
-        <Stack>
-          <Stack.Screen
-            name={BASE_SCREENS.AUTHENTICATION}
-            options={{
-              headerShown: false,
-            }}
-          />
-
-          {locationIsSet ? (
-            <Stack.Screen
-              name={BASE_SCREENS.TAB_SCREENS}
-              options={{
-                headerShown: false,
-              }}
-            />
-          ) : (
-            <Stack.Screen
-              name={BASE_SCREENS.LOCATION_SCREENS}
-              options={{
-                headerShown: false,
-              }}
-            />
-          )}
-        </Stack>
-        <FlashMessage position="top" />
-      </GestureHandlerRootView>
-    </>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <StatusBar style="dark" backgroundColor={COLORS.primary} />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name={BASE_SCREENS.AUTHENTICATION} />
+        <Stack.Screen name={BASE_SCREENS.LOCATION_SCREENS} />
+        <Stack.Screen name={BASE_SCREENS.TAB_SCREENS} />
+      </Stack>
+      <FlashMessage position="top" />
+    </GestureHandlerRootView>
   );
 }
