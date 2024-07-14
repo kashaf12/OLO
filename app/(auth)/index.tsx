@@ -10,15 +10,14 @@ import { Authentication } from '@/screens';
 const Page = () => {
   const {
     signInWithGoogle,
-    sendPhoneVerification,
     isGoogleSignInLoading,
     isPhoneVerificationLoading,
+    sendPhoneVerification,
   } = useAuth();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
   const handleGoogleLogin = async () => {
-    // console.log('handleGoogleLogin');
     try {
       await signInWithGoogle();
     } catch {
@@ -29,30 +28,18 @@ const Page = () => {
   };
 
   const handlePhoneLogin = async (phoneNumber: string) => {
-    console.log('phone login', phoneNumber);
-
     try {
       await sendPhoneVerification(phoneNumber);
       router.navigate({
         pathname: AUTH_SCREENS.OTP_PAGE,
         params: { phoneNumber },
       });
-    } catch (error) {
-      console.log('error', error);
+    } catch {
       FlashMessage({
         message: 'Failed to send OTP',
       });
     }
   };
-
-  // const handleVerifyCode = async (code: string) => {
-  //   try {
-  //     await verifyPhoneCode(code);
-  //     // Handle successful verification
-  //   } catch (error) {
-  //     // Handle error
-  //   }
-  // };
 
   return (
     <>

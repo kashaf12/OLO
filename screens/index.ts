@@ -9,6 +9,7 @@ import {
   Followers,
   Following,
   Authentication,
+  OtpVerification,
 } from './AccountStack';
 import { Favourite, MainAds } from './AdsStack';
 import { All, Buying, Selling } from './ChatStack';
@@ -51,4 +52,5 @@ export {
   UploadImages,
   Price,
   LocationConfirm,
+  OtpVerification,
 };

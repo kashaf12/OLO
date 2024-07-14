@@ -2,6 +2,7 @@ import { Redirect, Stack } from 'expo-router';
 
 import { COLORS, LOCATION_SCREENS } from '@/constants';
 import { useLocationStore } from '@/store';
+// import { useAuth } from '@/hooks';
 
 export default function LocationLayout() {
   const locationIsSet = useLocationStore((state) => state.isSet);

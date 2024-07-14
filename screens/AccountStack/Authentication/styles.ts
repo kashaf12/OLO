@@ -51,10 +51,12 @@ const styles = StyleSheet.create({
   phoneInputContainer: {
     width: '100%',
     gap: scale(5),
+    justifyContent: 'center',
     alignItems: 'center',
   },
   phoneInputWidth: {
     width: '85%',
+    marginBottom: 0,
   },
   footerContainer: {
     justifyContent: 'center',

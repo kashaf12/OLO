@@ -33,7 +33,7 @@ export const useAuth = () => {
     confirm,
     setIsGoogleSignInLoading,
     setIsPhoneVerificationLoading,
-    // setConfirm,
+    setConfirm,
     setUser,
     setIsLoading,
   } = useAuthStore(
@@ -52,7 +52,6 @@ export const useAuth = () => {
   );
 
   const signInWithGoogle = async () => {
-    console.log('signInWithGoogle');
     setIsGoogleSignInLoading(true);
     try {
       await GoogleSignin.hasPlayServices();
@@ -69,18 +68,57 @@ export const useAuth = () => {
 
   const sendPhoneVerification = async (phoneNumber: string) => {
     setIsPhoneVerificationLoading(true);
-    setTimeout(() => setIsPhoneVerificationLoading(false), 1000);
-    // try {
-    //   // const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-    //   // setConfirm(confirmation);
-    //   // return confirmation;
-    // } catch (error) {
-    //   console.error('Error sending phone verification:', error);
-    //   throw error;
-    // } finally {
-    //   setIsPhoneVerificationLoading(false);
-    // }
+    try {
+      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+      setConfirm(confirmation);
+      return confirmation;
+    } catch (error) {
+      console.error('Error sending phone verification:', error);
+      throw error;
+    } finally {
+      setIsPhoneVerificationLoading(false);
+    }
   };
+
+  // const verifyPhoneNumber = async (phoneNumber: string, codeSentCallback: () => void) => {
+  //   setIsPhoneVerificationLoading(true);
+  //   auth()
+  //     .verifyPhoneNumber(phoneNumber)
+  //     .on('state_changed', async (phoneAuthSnapshot) => {
+  //       setIsPhoneVerificationLoading(false);
+  //       console.log({ phoneAuthSnapshot });
+  //       switch (phoneAuthSnapshot.state) {
+  //         case auth.PhoneAuthState.CODE_SENT:
+  //           codeSentCallback();
+  //           console.log('sent sms code');
+  //           break;
+
+  //         case auth.PhoneAuthState.ERROR:
+  //           console.error('error');
+  //           break;
+
+  //         case auth.PhoneAuthState.AUTO_VERIFY_TIMEOUT:
+  //           console.error('auto verify timeout error');
+  //           break;
+
+  //         case auth.PhoneAuthState.AUTO_VERIFIED:
+  //           console.log('auto verified');
+
+  //           if (phoneAuthSnapshot.code === null) return;
+
+  //           const phoneCredential = auth.PhoneAuthProvider.credential(
+  //             phoneAuthSnapshot.verificationId,
+  //             phoneAuthSnapshot.code
+  //           );
+
+  //           console.log('phoneCredential', phoneCredential);
+  //           const response = await auth().signInWithCredential(phoneCredential);
+  //           console.log('response', response);
+  //           console.log('success phone auth sign in and login');
+  //           break;
+  //       }
+  //     });
+  // };
 
   const verifyPhoneCode = async (code: string) => {
     if (!confirm) {
@@ -124,5 +162,6 @@ export const useAuth = () => {
     sendPhoneVerification,
     verifyPhoneCode,
     signOut,
+    // verifyPhoneNumber,
   };
 };

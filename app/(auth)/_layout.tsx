@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 
-import { AUTH_SCREENS } from '@/constants';
+import { AUTH_SCREENS, COLORS } from '@/constants';
+import { scale } from '@/utils';
 
 export default function Layout() {
   return (
@@ -9,7 +10,15 @@ export default function Layout() {
       <Stack.Screen
         name={AUTH_SCREENS.OTP_PAGE}
         options={{
-          headerShown: false,
+          headerTitle: 'OTP Verification',
+          headerBackTitleVisible: false,
+          headerBackVisible: true,
+          headerBackTitleStyle: {
+            fontSize: scale(20),
+          },
+          headerStyle: {
+            backgroundColor: COLORS.themeBackground,
+          },
         }}
       />
     </Stack>
