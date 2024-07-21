@@ -36,6 +36,8 @@ export const useAuth = () => {
     setConfirm,
     setUser,
     setIsLoading,
+    setAuthSkipped,
+    authSkipped,
   } = useAuthStore(
     useShallow((state) => ({
       user: state.user,
@@ -48,6 +50,8 @@ export const useAuth = () => {
       setConfirm: state.setConfirm,
       setUser: state.setUser,
       setIsLoading: state.setIsLoading,
+      setAuthSkipped: state.setAuthSkipped,
+      authSkipped: state.authSkipped,
     }))
   );
 
@@ -79,46 +83,6 @@ export const useAuth = () => {
       setIsPhoneVerificationLoading(false);
     }
   };
-
-  // const verifyPhoneNumber = async (phoneNumber: string, codeSentCallback: () => void) => {
-  //   setIsPhoneVerificationLoading(true);
-  //   auth()
-  //     .verifyPhoneNumber(phoneNumber)
-  //     .on('state_changed', async (phoneAuthSnapshot) => {
-  //       setIsPhoneVerificationLoading(false);
-  //       console.log({ phoneAuthSnapshot });
-  //       switch (phoneAuthSnapshot.state) {
-  //         case auth.PhoneAuthState.CODE_SENT:
-  //           codeSentCallback();
-  //           console.log('sent sms code');
-  //           break;
-
-  //         case auth.PhoneAuthState.ERROR:
-  //           console.error('error');
-  //           break;
-
-  //         case auth.PhoneAuthState.AUTO_VERIFY_TIMEOUT:
-  //           console.error('auto verify timeout error');
-  //           break;
-
-  //         case auth.PhoneAuthState.AUTO_VERIFIED:
-  //           console.log('auto verified');
-
-  //           if (phoneAuthSnapshot.code === null) return;
-
-  //           const phoneCredential = auth.PhoneAuthProvider.credential(
-  //             phoneAuthSnapshot.verificationId,
-  //             phoneAuthSnapshot.code
-  //           );
-
-  //           console.log('phoneCredential', phoneCredential);
-  //           const response = await auth().signInWithCredential(phoneCredential);
-  //           console.log('response', response);
-  //           console.log('success phone auth sign in and login');
-  //           break;
-  //       }
-  //     });
-  // };
 
   const verifyPhoneCode = async (code: string) => {
     if (!confirm) {
@@ -153,6 +117,10 @@ export const useAuth = () => {
     }
   };
 
+  const skipAuthentication = () => {
+    setAuthSkipped(true);
+  };
+
   return {
     user,
     isLoading,
@@ -162,6 +130,7 @@ export const useAuth = () => {
     sendPhoneVerification,
     verifyPhoneCode,
     signOut,
-    // verifyPhoneNumber,
+    skipAuthentication,
+    authSkipped,
   };
 };

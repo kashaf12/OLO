@@ -16,7 +16,7 @@ export default function ApplicationNavigator() {
   useInitializeAuth(); // This will set up the auth listener
   const [isAppReady, setAppReady] = useState(false);
   const locationIsSet = useLocationStore((state) => state.isSet);
-  const { user, isLoading: authLoading } = useAuth();
+  const { user, isLoading: authLoading, authSkipped } = useAuth();
 
   const router = useRouter();
   const segments = useSegments();
@@ -41,14 +41,14 @@ export default function ApplicationNavigator() {
     const inAuthGroup = segments[0] === BASE_SCREENS.AUTHENTICATION;
     const inLocationGroup = segments[0] === BASE_SCREENS.LOCATION_SCREENS;
 
-    if (!user && !inAuthGroup) {
+    if (!user && !authSkipped && !inAuthGroup) {
       router.replace(BASE_SCREENS.AUTHENTICATION);
-    } else if (user && !locationIsSet && !inLocationGroup) {
+    } else if ((user || authSkipped) && !locationIsSet && !inLocationGroup) {
       router.replace(BASE_SCREENS.LOCATION_SCREENS);
-    } else if (user && locationIsSet && (inAuthGroup || inLocationGroup)) {
+    } else if ((user || authSkipped) && locationIsSet && (inAuthGroup || inLocationGroup)) {
       router.replace(BASE_SCREENS.TAB_SCREENS);
     }
-  }, [isAppReady, authLoading, user, locationIsSet, segments]);
+  }, [isAppReady, authLoading, user, locationIsSet, segments, authSkipped]);
 
   if (!isAppReady || authLoading) {
     return null;

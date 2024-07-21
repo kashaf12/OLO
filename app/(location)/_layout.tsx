@@ -2,12 +2,12 @@ import { Redirect, Stack } from 'expo-router';
 
 import { COLORS, LOCATION_SCREENS } from '@/constants';
 import { useLocationStore } from '@/store';
-// import { useAuth } from '@/hooks';
 
 export default function LocationLayout() {
   const locationIsSet = useLocationStore((state) => state.isSet);
 
   if (locationIsSet) return <Redirect href="(tabs)" />;
+
   return (
     <Stack>
       <Stack.Screen name={LOCATION_SCREENS.CURRENT_LOCATION} options={{ headerShown: false }} />

@@ -3,7 +3,7 @@ import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FlashMessage, LoadingModal } from '@/components';
-import { AUTH_SCREENS } from '@/constants';
+import { AUTH_SCREENS, BASE_SCREENS } from '@/constants';
 import { useAuth } from '@/hooks';
 import { Authentication } from '@/screens';
 
@@ -13,6 +13,7 @@ const Page = () => {
     isGoogleSignInLoading,
     isPhoneVerificationLoading,
     sendPhoneVerification,
+    skipAuthentication,
   } = useAuth();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -41,12 +42,17 @@ const Page = () => {
     }
   };
 
+  const handleSkip = () => {
+    skipAuthentication();
+    router.replace(BASE_SCREENS.LOCATION_SCREENS);
+  };
+
   return (
     <>
       <LoadingModal modalVisible={isPhoneVerificationLoading} title="Sending OTP" />
       <Authentication
         insets={insets}
-        onPressSkip={() => console.log('press skip')}
+        onPressSkip={handleSkip}
         onPressGoogle={handleGoogleLogin}
         onPressPhoneNumber={handlePhoneLogin}
         isGoogleSignInLoading={isGoogleSignInLoading}
