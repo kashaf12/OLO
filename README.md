@@ -1,8 +1,10 @@
-# OLO - Mobile Marketplace App
+# **WIP: Currently, I am building this project**
+
+# OLO - Classified Ads Marketplace App
 
 ## About the Application
 
-OLO is a mobile marketplace application built with React Native and Expo. It allows users to buy and sell items locally, chat with other users, and manage their listings. The app features location-based services, user authentication, and a clean, intuitive interface.
+OLO is a classified ads marketplace application built with React Native and Expo. It allows users to buy and sell items locally, chat with other users, and manage their ads listings. The app features location-based services, user authentication, and a clean, intuitive interface.
 
 Key features include:
 
