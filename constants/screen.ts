@@ -9,6 +9,7 @@ export const TAB_SCREENS = {
 export const LOCATION_SCREENS = {
   CURRENT_LOCATION: 'index',
   SELECT_LOCATION: 'selectLocation',
+  SELECT_LOCATION_BOTTOM_SHEET: 'selectLocationBottomSheet',
 };
 
 export const AUTH_SCREENS = {

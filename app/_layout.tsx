@@ -1,3 +1,4 @@
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { SplashScreen, Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
@@ -20,8 +21,6 @@ export default function ApplicationNavigator() {
 
   const router = useRouter();
   const segments = useSegments();
-
-  console.log({ user });
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', exitAlert);
@@ -56,13 +55,15 @@ export default function ApplicationNavigator() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar style="dark" backgroundColor={COLORS.primary} />
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name={BASE_SCREENS.AUTHENTICATION} />
-        <Stack.Screen name={BASE_SCREENS.LOCATION_SCREENS} />
-        <Stack.Screen name={BASE_SCREENS.TAB_SCREENS} />
-      </Stack>
-      <FlashMessage position="top" />
+      <BottomSheetModalProvider>
+        <StatusBar style="dark" backgroundColor={COLORS.primary} />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name={BASE_SCREENS.AUTHENTICATION} />
+          <Stack.Screen name={BASE_SCREENS.LOCATION_SCREENS} />
+          <Stack.Screen name={BASE_SCREENS.TAB_SCREENS} />
+        </Stack>
+        <FlashMessage position="top" />
+      </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
 }

@@ -36,11 +36,18 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
+    borderRadius: scale(5),
+    ...alignment.MBsmall,
   },
   linkButton: {
     ...alignment.Pmedium,
+    width: '80%',
+    height: '5%',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: scale(5),
+    padding: scale(5),
   },
 });

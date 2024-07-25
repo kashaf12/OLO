@@ -4,6 +4,7 @@ import CustomMarker from './CustomMarker';
 import FlashMessage from './FlashMessage';
 import { BackButton, LeftButton, RightButton, ModalHeader, MainHeader } from './Header';
 import LocationPermission from './LocationPermission';
+import LocationPickerBottomSheet from './LocationPickerBottomSheet';
 import {
   AddFilter,
   DeactivateModal,
@@ -46,4 +47,5 @@ export {
   OtpInputContainer,
   TextTimer,
   DefaultTextButton,
+  LocationPickerBottomSheet,
 };

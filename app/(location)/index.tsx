@@ -2,10 +2,11 @@ import * as Linking from 'expo-linking';
 import { LocationObjectCoords, PermissionStatus } from 'expo-location';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { FlashMessage } from '@/components';
+import { FlashMessage, LocationPickerBottomSheet } from '@/components';
+import { LocationPickerBottomSheetI } from '@/components/LocationPickerBottomSheet/types';
 import { COLORS, LOCATION_SCREENS } from '@/constants';
 import { useLocationPermission } from '@/hooks';
 import { CurrentLocation } from '@/screens';
@@ -14,6 +15,9 @@ function Page() {
   const inset = useSafeAreaInsets();
   const router = useRouter();
   const { getCurrentLocation, getLocationPermission } = useLocationPermission();
+  const bottomSheetRef = useRef<LocationPickerBottomSheetI>(null);
+
+  const handlePresentModalPress = () => bottomSheetRef.current?.onOpen();
 
   const setCurrentLocation = async () => {
     const locationPermission = await getLocationPermission();
@@ -44,6 +48,7 @@ function Page() {
   return (
     <>
       <StatusBar style="light" />
+      <LocationPickerBottomSheet ref={bottomSheetRef} />
       <CurrentLocation
         style={{
           backgroundColor: COLORS.selectedText,
@@ -51,7 +56,7 @@ function Page() {
           paddingBottom: inset.bottom,
         }}
         onPressSetCurrentLocation={setCurrentLocation}
-        onPressSelectLocation={() => router.navigate(LOCATION_SCREENS.SELECT_LOCATION)}
+        onPressSelectLocation={handlePresentModalPress}
       />
     </>
   );

@@ -28,14 +28,14 @@ function CurrentLocation({
           },
         ]}>
         <View style={[styles.flex, styles.screenBackground]}>
+          <View style={styles.descriptionEmpty}>
+            <TextDefault textColor={COLORS.dark} bolder center H3>
+              OLO uses your location to show the products near you!
+            </TextDefault>
+          </View>
           <View style={styles.subContainerImage}>
             <View style={styles.imageContainer}>
               <LocationPermission width={scale(300)} height={scale(300)} />
-            </View>
-            <View style={styles.descriptionEmpty}>
-              <TextDefault textColor={COLORS.dark} bolder center>
-                Olo uses your location to show the products near you!
-              </TextDefault>
             </View>
             <TouchableOpacity
               activeOpacity={0.7}
@@ -45,15 +45,15 @@ function CurrentLocation({
                 use current location
               </TextDefault>
             </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.linkButton}
+              onPress={onPressSelectLocation}>
+              <TextDefault textColor={COLORS.dark} H5 bold center>
+                Select another location
+              </TextDefault>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.linkButton}
-            onPress={onPressSelectLocation}>
-            <TextDefault textColor={COLORS.dark} H5 bold center>
-              Select another location
-            </TextDefault>
-          </TouchableOpacity>
         </View>
       </View>
       <View style={{ paddingBottom: style.paddingBottom }} />

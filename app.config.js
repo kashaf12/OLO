@@ -99,6 +99,7 @@ module.exports = {
         measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID,
         webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
       },
+      googlePlaceAPIkey: process.env.EXPO_PUBLIC_PLACES_API_KEY,
     },
   },
 };
