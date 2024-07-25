@@ -8,6 +8,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 
 import styles from './styles';
 import { LocationPickerBottomSheetI, LocationPickerBottomSheetProps } from './types';
+import CurrentLocationComponent from '../CurrentLocation';
 import { TextDefault } from '../Text';
 
 import { COLORS } from '@/constants';
@@ -56,6 +57,8 @@ const LocationPickerBottomSheet = React.forwardRef<
           <TextDefault H3 style={styles.textStyle}>
             Select a location
           </TextDefault>
+          <CurrentLocationComponent onLocationSelect={console.log} />
+
           <GooglePlacesAutocomplete
             placeholder="Search for area, street or locality..."
             fetchDetails

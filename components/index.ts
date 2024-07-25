@@ -1,5 +1,6 @@
 import { EmptyButton, LoginButton, SkipButton, DefaultTextButton } from './Buttons';
 import { FollowerCard, FollowingCard } from './Card';
+import CurrentLocationComponent from './CurrentLocation';
 import CustomMarker from './CustomMarker';
 import FlashMessage from './FlashMessage';
 import { BackButton, LeftButton, RightButton, ModalHeader, MainHeader } from './Header';
@@ -48,4 +49,5 @@ export {
   TextTimer,
   DefaultTextButton,
   LocationPickerBottomSheet,
+  CurrentLocationComponent,
 };
