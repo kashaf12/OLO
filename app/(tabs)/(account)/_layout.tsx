@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-import { BackButton } from '@/components';
+import { LeftButton } from '@/components';
 import { ACCOUNT_SCREENS, COLORS } from '@/constants';
 import { textStyles } from '@/utils';
 
@@ -18,7 +18,7 @@ export default function AccountLayout() {
           ...textStyles.H3,
           ...textStyles.Bold,
         },
-        headerLeft: () => <BackButton iconColor={COLORS.headerText} icon="leftArrow" />,
+        headerLeft: () => <LeftButton iconColor={COLORS.headerText} icon="back" />,
       }}>
       <Stack.Screen
         name={ACCOUNT_SCREENS.MAIN_ACCOUNT}

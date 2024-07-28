@@ -10,7 +10,7 @@ import { DeactivateModal, TextDefault } from '@/components';
 import { COLORS } from '@/constants';
 import { alignment, scale } from '@/utils';
 
-function Settings({ onPressPrivacy, onPressNotification }: SettingsProps) {
+function Settings({ onPressPrivacy, onPressNotification, onPressLogout }: SettingsProps) {
   const [modalVisible, setModalVisible] = useState(false);
   const modalizeRef = useRef<Modalize>(null);
 
@@ -52,12 +52,7 @@ function Settings({ onPressPrivacy, onPressNotification }: SettingsProps) {
         <Entypo name="chevron-small-right" size={scale(30)} color={COLORS.buttonbackground} />
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.smallContainer}
-        onPress={() => {
-          // logout();
-          // navigation.dispatch(StackActions.popToTop());
-        }}>
+      <TouchableOpacity style={styles.smallContainer} onPress={onPressLogout}>
         <TextDefault bold H5 style={[alignment.PLlarge, styles.flex]}>
           Logout
         </TextDefault>
@@ -71,12 +66,7 @@ function Settings({ onPressPrivacy, onPressNotification }: SettingsProps) {
           Deactivate
         </TextDefault>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.smallContainer}
-        onPress={() => {
-          // logout();
-          // navigation.dispatch(StackActions.popToTop());
-        }}>
+      <TouchableOpacity style={styles.smallContainer} onPress={onPressLogout}>
         <TextDefault bold H5 style={[alignment.PLlarge, styles.flex]}>
           Logout from all devices
         </TextDefault>

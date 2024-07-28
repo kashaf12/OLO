@@ -14,6 +14,9 @@ function MainAccount({
   onPressSettings,
   onPressProfile,
   onPressNetwork,
+  isAuthenticated,
+  userName,
+  onPressLogin,
 }: MainAccountProps) {
   return (
     <View style={[styles.flex, styles.container]}>
@@ -27,53 +30,50 @@ function MainAccount({
         </View>
         <View style={[styles.flex, styles.profileInfo]}>
           <TextDefault H4 bold style={alignment.MBmedium}>
-            Log in
+            {!isAuthenticated ? 'Log in' : userName}
           </TextDefault>
           <TouchableOpacity
             activeOpacity={0.5}
             style={alignment.PBxSmall}
-            onPress={
-              onPressProfile
-              //   isLoggedIn ? navigation.navigate('Profile') : navigation.navigate('Registration')
-            }>
+            onPress={isAuthenticated ? onPressProfile : onPressLogin}>
             <TextDefault textColor={COLORS.spinnerColor} H5 bold>
-              Log in to your account
+              {!isAuthenticated ? 'Log in to your account' : 'Go to Profile'}
             </TextDefault>
           </TouchableOpacity>
         </View>
       </View>
-      {/* {isLoggedIn && ( */}
-      <>
-        <TouchableOpacity
-          style={styles.smallContainer}
-          onPress={onPressNetwork}
-          //   onPress={() => navigation.navigate('Network')}
-        >
-          <FontAwesome5 name="users" size={scale(20)} color={COLORS.buttonbackground} />
-          <View style={[styles.flex]}>
-            <TextDefault bold H5 style={alignment.PLlarge}>
-              My Network
-            </TextDefault>
-            <TextDefault light style={[alignment.PLlarge, alignment.MTxSmall]}>
-              Followers, following and find friends
-            </TextDefault>
-          </View>
-          <Entypo name="chevron-small-right" size={scale(30)} color={COLORS.buttonbackground} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.smallContainer} onPress={onPressSettings}>
-          <AntDesign name="setting" size={scale(22)} color={COLORS.buttonbackground} />
-          <View style={[styles.flex]}>
-            <TextDefault bold H5 style={alignment.PLlarge}>
-              Settings
-            </TextDefault>
-            <TextDefault light style={[alignment.PLlarge, alignment.MTxSmall]}>
-              Privacy and logout
-            </TextDefault>
-          </View>
-          <Entypo name="chevron-small-right" size={scale(30)} color={COLORS.buttonbackground} />
-        </TouchableOpacity>
-      </>
-      {/* )} */}
+      {isAuthenticated && (
+        <>
+          <TouchableOpacity
+            style={styles.smallContainer}
+            onPress={onPressNetwork}
+            //   onPress={() => navigation.navigate('Network')}
+          >
+            <FontAwesome5 name="users" size={scale(20)} color={COLORS.buttonbackground} />
+            <View style={[styles.flex]}>
+              <TextDefault bold H5 style={alignment.PLlarge}>
+                My Network
+              </TextDefault>
+              <TextDefault light style={[alignment.PLlarge, alignment.MTxSmall]}>
+                Followers, following and find friends
+              </TextDefault>
+            </View>
+            <Entypo name="chevron-small-right" size={scale(30)} color={COLORS.buttonbackground} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallContainer} onPress={onPressSettings}>
+            <AntDesign name="setting" size={scale(22)} color={COLORS.buttonbackground} />
+            <View style={[styles.flex]}>
+              <TextDefault bold H5 style={alignment.PLlarge}>
+                Settings
+              </TextDefault>
+              <TextDefault light style={[alignment.PLlarge, alignment.MTxSmall]}>
+                Privacy and logout
+              </TextDefault>
+            </View>
+            <Entypo name="chevron-small-right" size={scale(30)} color={COLORS.buttonbackground} />
+          </TouchableOpacity>
+        </>
+      )}
       <TouchableOpacity style={styles.smallContainer} onPress={onPressHelp}>
         <Ionicons name="help-circle-outline" size={scale(22)} color={COLORS.buttonbackground} />
         <View style={[styles.flex]}>
@@ -86,14 +86,11 @@ function MainAccount({
         </View>
         <Entypo name="chevron-small-right" size={scale(30)} color={COLORS.buttonbackground} />
       </TouchableOpacity>
-      {/* {!isLoggedIn && ( */}
-      <View style={styles.loginBtn}>
-        <EmptyButton
-          title="Login or register"
-          //   onPress={() => navigation.navigate('Registration')}
-        />
-      </View>
-      {/* )} */}
+      {!isAuthenticated && (
+        <View style={styles.loginBtn}>
+          <EmptyButton title="Login or register" onPress={onPressLogin} />
+        </View>
+      )}
     </View>
   );
 }

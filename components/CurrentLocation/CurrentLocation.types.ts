@@ -1,3 +1,5 @@
+import { getCurrentLocationResponse } from '@/hooks/useLocationPermission/types';
+
 export type CurrentLocationComponentProps = {
-  onLocationSelect: (latitude: number, longitude: number) => void;
+  onLocationSelect: (result: getCurrentLocationResponse) => void;
 };

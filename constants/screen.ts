@@ -33,7 +33,7 @@ export const HOME_SCREENS = {
 export const BASE_SCREENS = {
   AUTHENTICATION: '(auth)',
   TAB_SCREENS: '(tabs)',
-  LOCATION_SCREENS: '(location)',
+  LOCATION_SCREENS: 'location',
 };
 
 export const ADS_TAB_SCREENS = {

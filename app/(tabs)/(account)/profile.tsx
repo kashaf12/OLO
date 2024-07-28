@@ -4,9 +4,11 @@ import { Share } from 'react-native';
 
 import { FlashMessage, RightButton } from '@/components';
 import { COLORS } from '@/constants';
+import { useAuth } from '@/hooks';
 import { Profile } from '@/screens';
 
 const Page = () => {
+  const { user } = useAuth();
   const navigation = useNavigation();
 
   async function share() {
@@ -42,7 +44,7 @@ const Page = () => {
     });
   }, [navigation]);
 
-  return <Profile />;
+  return <Profile name={user?.displayName || 'OLO USER'} />;
 };
 
 export default Page;

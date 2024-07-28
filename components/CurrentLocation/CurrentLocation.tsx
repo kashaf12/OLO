@@ -31,12 +31,10 @@ const CurrentLocationComponent: React.FC<CurrentLocationComponentProps> = ({
 
   const fetchCurrentLocation = async () => {
     const result = await getCurrentLocation();
-    if (!result.error && result.coords) {
-      const { latitude, longitude } = result.coords;
-      const address = await Location.reverseGeocodeAsync({ latitude, longitude });
-      if (address[0]) {
-        setCurrentAddress(`${address[0].street}, ${address[0].city}, ${address[0].region}`);
-      }
+    if (!result.error && result.coords && result.address) {
+      setCurrentAddress(
+        `${result.address.street}, ${result.address.city}, ${result.address.region}`
+      );
     } else {
       console.error('Error getting current location:', result.message);
     }
@@ -56,11 +54,7 @@ const CurrentLocationComponent: React.FC<CurrentLocationComponentProps> = ({
 
   const handleUseCurrentLocation = async () => {
     const result = await getCurrentLocation();
-    if (!result.error && result.coords) {
-      onLocationSelect(result.coords.latitude, result.coords.longitude);
-    } else {
-      console.error('Error getting current location:', result.message);
-    }
+    onLocationSelect(result);
   };
 
   if (permissionStatus === Location.PermissionStatus.GRANTED) {
