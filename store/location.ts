@@ -1,3 +1,4 @@
+import { LocationGeocodedAddress, LocationObjectCoords } from 'expo-location';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
@@ -6,42 +7,27 @@ import { locationStateStorage } from '@/storage';
 const LOCATION_ZUSTAND_STORAGE_KEY = 'location__storage';
 
 export interface LocationStoreState {
-  address: string;
-  latitude: number;
-  longitude: number;
+  address?: LocationGeocodedAddress;
+  coords?: Pick<LocationObjectCoords, 'latitude' | 'longitude'>;
   label: string;
   isSet: boolean;
   setLabel: (label: string) => void;
-  setAddress: (address: string) => void;
-  setLatitude: (latitude: number) => void;
-  setLongitude: (longitude: number) => void;
-  setLocation: ({
-    label,
-    address,
-    latitude,
-    longitude,
-  }: {
-    label: string;
-    address: string;
-    latitude: number;
-    longitude: number;
-  }) => void;
+  setAddress: (address: LocationGeocodedAddress) => void;
+  setCoords: (coords: Pick<LocationObjectCoords, 'latitude' | 'longitude'>) => void;
+  setLocation: (location: Omit<Partial<LocationStoreState>, 'setLocation'>) => void;
 }
 
 export const useLocationStore = create<LocationStoreState>()(
   persist(
     (set) => ({
       isSet: false,
-      address: 'Current location',
-      latitude: 26.867287853605735,
-      longitude: 80.95443866441771,
+      address: undefined,
+      coords: undefined,
       label: 'Current location',
       setLabel: (label) => set({ label }),
       setAddress: (address) => set({ address }),
-      setLatitude: (latitude) => set({ latitude }),
-      setLongitude: (longitude) => set({ longitude }),
-      setLocation: ({ label, address, latitude, longitude }) =>
-        set({ label, address, latitude, longitude, isSet: true }),
+      setCoords: (coords) => set({ coords }),
+      setLocation: (location) => set({ isSet: true, ...location }),
     }),
     {
       name: LOCATION_ZUSTAND_STORAGE_KEY,

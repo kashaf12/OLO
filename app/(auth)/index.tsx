@@ -44,7 +44,11 @@ const Page = () => {
 
   const handleSkip = () => {
     skipAuthentication();
-    router.replace(BASE_SCREENS.LOCATION_SCREENS);
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace(BASE_SCREENS.LOCATION_SCREENS);
+    }
   };
 
   return (

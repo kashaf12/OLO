@@ -55,6 +55,8 @@ export const useAuth = () => {
     }))
   );
 
+  const isAuthenticated = !!user;
+
   const signInWithGoogle = async () => {
     setIsGoogleSignInLoading(true);
     try {
@@ -122,6 +124,7 @@ export const useAuth = () => {
   };
 
   return {
+    isAuthenticated,
     user,
     isLoading,
     isGoogleSignInLoading,
@@ -132,5 +135,6 @@ export const useAuth = () => {
     signOut,
     skipAuthentication,
     authSkipped,
+    setAuthSkipped,
   };
 };

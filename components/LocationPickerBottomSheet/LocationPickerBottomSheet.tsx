@@ -12,6 +12,7 @@ import CurrentLocationComponent from '../CurrentLocation';
 import { TextDefault } from '../Text';
 
 import { COLORS } from '@/constants';
+import { useLocationPermission } from '@/hooks';
 
 const defaultSnapPoints = ['75%'];
 const API_KEY =
@@ -20,8 +21,9 @@ const API_KEY =
 const LocationPickerBottomSheet = React.forwardRef<
   LocationPickerBottomSheetI,
   LocationPickerBottomSheetProps
->((props, ref) => {
+>(({ onLocationSelected, ...props }, ref) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const { getAddress } = useLocationPermission();
 
   const onOpen = useCallback(() => {
     bottomSheetModalRef.current?.present?.();
@@ -57,19 +59,34 @@ const LocationPickerBottomSheet = React.forwardRef<
           <TextDefault H3 style={styles.textStyle}>
             Select a location
           </TextDefault>
-          <CurrentLocationComponent onLocationSelect={console.log} />
-
           <GooglePlacesAutocomplete
             placeholder="Search for area, street or locality..."
             fetchDetails
-            onPress={(data, details = null) => {
+            inbetweenCompo={<CurrentLocationComponent onLocationSelect={onLocationSelected} />}
+            isRowScrollable={false}
+            onPress={async (data, details = null) => {
               // 'details' is provided when fetchDetails = true
-              console.log(data, details);
+              const latitude = details?.geometry.location.lat;
+              const longitude = details?.geometry.location.lng;
+              if (latitude !== undefined && longitude !== undefined) {
+                const address = await getAddress({ latitude, longitude });
+                if (!address.error) {
+                  const param = {
+                    coords: {
+                      latitude,
+                      longitude,
+                    },
+                    error: false,
+                    address: address.address,
+                  };
+                  onLocationSelected(param);
+                }
+              }
             }}
             query={{
               key: API_KEY,
               language: 'en',
-              components: 'country:ind',
+              components: 'country:in',
             }}
             renderLeftButton={() => (
               <Ionicons
@@ -84,9 +101,6 @@ const LocationPickerBottomSheet = React.forwardRef<
               leftIcon: { type: 'font-awesome', name: 'chevron-left' },
               errorStyle: { color: 'red' },
             }}
-            onFail={(e) => console.log('onFail', e)}
-            onNotFound={() => console.log('onNotFound')}
-            onTimeout={() => console.log('onTimeout')}
             styles={{
               textInputContainer: styles.inputTextContainer,
               poweredContainer: {

@@ -1,13 +1,14 @@
 import React from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
 
+import { ProfileProps } from './Profile.types';
 import styles from './styles';
 
 import { TextDefault } from '@/components';
 import { COLORS } from '@/constants';
 import { alignment } from '@/utils';
 
-function Profile() {
+function Profile({ name }: ProfileProps) {
   return (
     <View style={[styles.flex, styles.mainContainer]}>
       <View style={styles.profileContainer}>
@@ -57,8 +58,7 @@ function Profile() {
           </View>
         </View>
         <TextDefault H4 bold style={[alignment.MBxSmall, alignment.PLsmall, alignment.MTsmall]}>
-          {/* {profile.name} */}
-          Kashaf
+          {name}
         </TextDefault>
       </View>
     </View>

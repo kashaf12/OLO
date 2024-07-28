@@ -1,23 +1,34 @@
 import * as Linking from 'expo-linking';
-import { LocationObjectCoords, PermissionStatus } from 'expo-location';
-import { useRouter } from 'expo-router';
+import { PermissionStatus } from 'expo-location';
 import { StatusBar } from 'expo-status-bar';
 import React, { useRef } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FlashMessage, LocationPickerBottomSheet } from '@/components';
 import { LocationPickerBottomSheetI } from '@/components/LocationPickerBottomSheet/types';
-import { COLORS, LOCATION_SCREENS } from '@/constants';
+import { COLORS } from '@/constants';
 import { useLocationPermission } from '@/hooks';
+import { getCurrentLocationResponse } from '@/hooks/useLocationPermission/types';
 import { CurrentLocation } from '@/screens';
+import { useLocationStore } from '@/store';
 
 function Page() {
   const inset = useSafeAreaInsets();
-  const router = useRouter();
+  const setLocation = useLocationStore((state) => state.setLocation);
   const { getCurrentLocation, getLocationPermission } = useLocationPermission();
   const bottomSheetRef = useRef<LocationPickerBottomSheetI>(null);
 
   const handlePresentModalPress = () => bottomSheetRef.current?.onOpen();
+
+  const handleLocationSelection = (e: getCurrentLocationResponse) => {
+    if (e.coords && e.address) {
+      setLocation({
+        label: e.address.name || e.address.formattedAddress || 'India',
+        address: e.address,
+        coords: e.coords,
+      });
+    }
+  };
 
   const setCurrentLocation = async () => {
     const locationPermission = await getLocationPermission();
@@ -40,15 +51,24 @@ function Page() {
       });
       return;
     }
-    router.navigate({
-      pathname: LOCATION_SCREENS.SELECT_LOCATION,
-      params: currentLocationStatus.coords as LocationObjectCoords,
-    });
+    handleLocationSelection(currentLocationStatus);
   };
+
+  const onLocationSelected = (response: getCurrentLocationResponse) => {
+    bottomSheetRef.current?.onClose();
+    if (response.error) {
+      FlashMessage({
+        message: response.message ?? 'Failed to get current location',
+      });
+      return;
+    }
+    handleLocationSelection(response);
+  };
+
   return (
     <>
       <StatusBar style="light" />
-      <LocationPickerBottomSheet ref={bottomSheetRef} />
+      <LocationPickerBottomSheet ref={bottomSheetRef} onLocationSelected={onLocationSelected} />
       <CurrentLocation
         style={{
           backgroundColor: COLORS.selectedText,

@@ -1,31 +1,32 @@
 import { useNavigation } from 'expo-router';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { MainHeader } from '@/components';
+import { FlashMessage, LocationPickerBottomSheet, MainHeader } from '@/components';
+import { LocationPickerBottomSheetI } from '@/components/LocationPickerBottomSheet/types';
+import { getCurrentLocationResponse } from '@/hooks/useLocationPermission/types';
 import { MainHome } from '@/screens';
 import { useLocationStore } from '@/store';
 
 const Home = () => {
   const navigation = useNavigation();
   const [filters, setFilters] = useState<{
-    zone: string;
     title: string;
     latitude: number | null;
     longitude: number | null;
   }>({
-    zone: '642e439cd320c55d90dd6cd9',
     title: 'Lucknow',
     latitude: null,
     longitude: null,
   });
   const inset = useSafeAreaInsets();
   const [search, setSearch] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
   const [searchVisible, setSerachVisible] = useState(false);
-  const t = useLocationStore((state) => state);
+  const label = useLocationStore((state) => state.label);
+  const setLocation = useLocationStore((state) => state.setLocation);
 
-  const toggleModal = () => setModalVisible(!modalVisible);
+  const bottomSheetRef = useRef<LocationPickerBottomSheetI>(null);
+  const handlePresentModalPress = () => bottomSheetRef.current?.onOpen();
   const toggleSearch = () => setSerachVisible(!searchVisible);
 
   useLayoutEffect(() => {
@@ -33,47 +34,55 @@ const Home = () => {
       header: () => (
         <MainHeader
           search={search}
-          onModalToggle={toggleModal}
+          onModalToggle={handlePresentModalPress}
           toggleSearch={toggleSearch}
-          locationText={filters.title}
+          locationText={label}
           inset={inset}
           onPressNotification={console.log}
         />
       ),
     });
-  }, [navigation, filters, search]);
+  }, [navigation, filters, search, label]);
 
-  useEffect(() => {
-    storageLocation();
-  }, []);
-
-  async function storageLocation() {
-    console.log(t);
-    if (t) {
-      setFilters({
-        zone: '642e439cd320c55d90dd6cd9',
-        title: t.label,
-        latitude: t.latitude,
-        longitude: t.longitude,
+  const handleLocationSelection = (e: getCurrentLocationResponse) => {
+    if (e.coords && e.address) {
+      setLocation({
+        label: e.address.name || e.address.formattedAddress || 'India',
+        address: e.address,
+        coords: e.coords,
       });
     }
-  }
+  };
+
+  const onLocationSelected = (response: getCurrentLocationResponse) => {
+    bottomSheetRef.current?.onClose();
+    if (response.error) {
+      FlashMessage({
+        message: response.message ?? 'Failed to get current location',
+      });
+      return;
+    }
+    handleLocationSelection(response);
+  };
 
   return (
-    <MainHome
-      //   categoryData={[]}
-      //   categoryError={null}
-      //   data={[]}
-      error={null}
-      loading
-      networkStatus={0}
-      onPressCategories={console.log}
-      onPressSubCategory={console.log}
-      refetch={console.log}
-      search={''}
-      setFilters={setFilters}
-      setSearch={setSearch}
-    />
+    <>
+      <LocationPickerBottomSheet ref={bottomSheetRef} onLocationSelected={onLocationSelected} />
+      <MainHome
+        //   categoryData={[]}
+        //   categoryError={null}
+        //   data={[]}
+        error={null}
+        loading
+        networkStatus={0}
+        onPressCategories={console.log}
+        onPressSubCategory={console.log}
+        refetch={console.log}
+        search={''}
+        setFilters={setFilters}
+        setSearch={setSearch}
+      />
+    </>
   );
 };
 

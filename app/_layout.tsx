@@ -6,7 +6,7 @@ import { BackHandler } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { BASE_SCREENS, COLORS } from '@/constants';
+import { BASE_SCREENS, COLORS, TAB_SCREENS } from '@/constants';
 import { useAuth, useInitializeAuth } from '@/hooks';
 import { useLocationStore } from '@/store';
 import { exitAlert } from '@/utils';
@@ -45,7 +45,7 @@ export default function ApplicationNavigator() {
     } else if ((user || authSkipped) && !locationIsSet && !inLocationGroup) {
       router.replace(BASE_SCREENS.LOCATION_SCREENS);
     } else if ((user || authSkipped) && locationIsSet && (inAuthGroup || inLocationGroup)) {
-      router.replace(BASE_SCREENS.TAB_SCREENS);
+      router.replace(`${BASE_SCREENS.TAB_SCREENS}/${TAB_SCREENS.HOME}`);
     }
   }, [isAppReady, authLoading, user, locationIsSet, segments, authSkipped]);
 
@@ -59,7 +59,7 @@ export default function ApplicationNavigator() {
         <StatusBar style="dark" backgroundColor={COLORS.primary} />
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name={BASE_SCREENS.AUTHENTICATION} />
-          <Stack.Screen name={BASE_SCREENS.LOCATION_SCREENS} />
+          <Stack.Screen name={BASE_SCREENS.LOCATION_SCREENS} options={{ headerShown: false }} />
           <Stack.Screen name={BASE_SCREENS.TAB_SCREENS} />
         </Stack>
         <FlashMessage position="top" />
