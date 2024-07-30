@@ -10,7 +10,7 @@ admin.initializeApp();
 const db = admin.firestore();
 const usersCollection = db.collection('User');
 
-export const createUserDocument = functions.auth.user().onCreate(async (user) => {
+export const createUserDocumentOnSignUp = functions.auth.user().onCreate(async (user) => {
   logger.info('Starting Create User Document flow', { userId: user.uid });
 
   // Reference to the new user document
