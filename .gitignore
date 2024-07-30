@@ -67,3 +67,7 @@ yarn-error.*
 
 GoogleService-info.plist
 google-services.json
+
+lib
+
+*.log
