@@ -1,4 +1,5 @@
 import { Authentication } from './Authentication';
+import { EditProfile } from './EditProfile';
 import { Help } from './Help';
 import { HelpBrowser } from './HelpBrowser';
 import { MainAccount } from './MainAccount';
@@ -21,4 +22,5 @@ export {
   Following,
   Authentication,
   OtpVerification,
+  EditProfile,
 };

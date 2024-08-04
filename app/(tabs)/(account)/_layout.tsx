@@ -34,6 +34,7 @@ export default function AccountLayout() {
       />
       <Stack.Screen name={ACCOUNT_SCREENS.SETTINGS} />
       <Stack.Screen name={ACCOUNT_SCREENS.PROFILE} />
+      <Stack.Screen name={ACCOUNT_SCREENS.EDIT_PROFILE} />
       <Stack.Screen name={ACCOUNT_SCREENS.PRIVACY} />
       <Stack.Screen name={ACCOUNT_SCREENS.NOTIFICATIONS} />
       <Stack.Screen name={ACCOUNT_SCREENS.HELP_BROWSER} />

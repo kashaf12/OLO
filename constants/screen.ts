@@ -52,6 +52,7 @@ export const ACCOUNT_SCREENS = {
   HELP: 'help',
   SETTINGS: 'settings',
   PROFILE: 'profile',
+  EDIT_PROFILE: 'editProfile',
   PRIVACY: 'privacy',
   NOTIFICATIONS: 'notifications',
   HELP_BROWSER: 'helpBrowser',

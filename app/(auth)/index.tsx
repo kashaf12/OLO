@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { Href, useRouter } from 'expo-router';
 import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -34,7 +34,7 @@ const Page = () => {
       router.navigate({
         pathname: AUTH_SCREENS.OTP_PAGE,
         params: { phoneNumber },
-      });
+      } as Href);
     } catch {
       FlashMessage({
         message: 'Failed to send OTP',
@@ -47,7 +47,7 @@ const Page = () => {
     if (router.canGoBack()) {
       router.back();
     } else {
-      router.replace(BASE_SCREENS.LOCATION_SCREENS);
+      router.replace(BASE_SCREENS.LOCATION_SCREENS as Href);
     }
   };
 

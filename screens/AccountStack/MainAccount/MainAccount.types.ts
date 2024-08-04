@@ -6,4 +6,6 @@ export type MainAccountProps = {
   onPressNetwork?: () => void;
   isAuthenticated?: boolean;
   userName?: string;
+  profilePhotoUrl?: string | null;
+  description?: string | null;
 };

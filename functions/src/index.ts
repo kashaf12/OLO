@@ -18,18 +18,14 @@ export const createUserDocumentOnSignUp = functions.auth.user().onCreate(async (
 
   // Prepare user data
   const userData = {
-    displayName: user.displayName || 'OLO_USER',
+    displayName: user.displayName || 'NOT_FOUND',
     email: user.email || null,
     phoneNumber: user.phoneNumber || null,
-    createdAt: FieldValue.serverTimestamp(),
-    updatedAt: FieldValue.serverTimestamp(),
     lastLoginAt: FieldValue.serverTimestamp(),
     isActive: true,
     stats: {
       totalAds: 0,
       activeAds: 0,
-      totalSales: 0,
-      totalPurchases: 0,
       rating: -1,
     },
     // Add any other initial fields here

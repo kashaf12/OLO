@@ -17,6 +17,8 @@ function MainAccount({
   isAuthenticated,
   userName,
   onPressLogin,
+  profilePhotoUrl = null,
+  description = null,
 }: MainAccountProps) {
   return (
     <View style={[styles.flex, styles.container]}>
@@ -24,17 +26,18 @@ function MainAccount({
         <View style={styles.imageContainer}>
           <Image
             style={styles.imgResponsive}
-            source={require('@/assets/avatar.png')}
+            source={profilePhotoUrl ? { uri: profilePhotoUrl } : require('@/assets/avatar.png')}
             resizeMode="cover"
           />
         </View>
         <View style={[styles.flex, styles.profileInfo]}>
-          <TextDefault H4 bold style={alignment.MBmedium}>
+          <TextDefault H4 bold>
             {!isAuthenticated ? 'Log in' : userName}
           </TextDefault>
+          {isAuthenticated && description && <TextDefault>{description}</TextDefault>}
           <TouchableOpacity
             activeOpacity={0.5}
-            style={alignment.PBxSmall}
+            style={[alignment.PBxSmall, alignment.MTmedium]}
             onPress={isAuthenticated ? onPressProfile : onPressLogin}>
             <TextDefault textColor={COLORS.spinnerColor} H5 bold>
               {!isAuthenticated ? 'Log in to your account' : 'Go to Profile'}

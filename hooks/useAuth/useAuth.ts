@@ -4,9 +4,7 @@ import Constants from 'expo-constants';
 import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
-import { getUserInfo } from '@/services';
 import { useAuthStore } from '@/store';
-import { UserType } from '@/types';
 
 GoogleSignin.configure({
   webClientId:
@@ -14,22 +12,12 @@ GoogleSignin.configure({
 });
 export const useInitializeAuth = () => {
   const setUser = useAuthStore((state) => state.setUser);
-  const setUserInfo = useAuthStore((state) => state.setUserInfo);
   const setIsLoading = useAuthStore((state) => state.setIsLoading);
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(async (firebaseUser) => {
-      if (firebaseUser) {
-        try {
-          const userInfo = await getUserInfo(firebaseUser.uid);
-          setUserInfo(userInfo as UserType);
-        } catch (error) {
-          console.error('Error fetching user info:', error);
-          // Handle error (e.g., show an error message to the user)
-        }
-      }
-      setUser(firebaseUser);
       setIsLoading(false);
+      setUser(firebaseUser);
     });
 
     return () => unsubscribe();

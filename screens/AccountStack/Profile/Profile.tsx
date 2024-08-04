@@ -8,7 +8,12 @@ import { TextDefault } from '@/components';
 import { COLORS } from '@/constants';
 import { alignment } from '@/utils';
 
-function Profile({ name }: ProfileProps) {
+function Profile({
+  name,
+  onPressEditProfile,
+  profilePhotoUrl = null,
+  description = null,
+}: ProfileProps) {
   return (
     <View style={[styles.flex, styles.mainContainer]}>
       <View style={styles.profileContainer}>
@@ -16,7 +21,7 @@ function Profile({ name }: ProfileProps) {
           <View style={styles.imageContainer}>
             <Image
               style={styles.imgResponsive}
-              source={require('@/assets/avatar.png')}
+              source={profilePhotoUrl ? { uri: profilePhotoUrl } : require('@/assets/avatar.png')}
               resizeMode="cover"
             />
           </View>
@@ -49,10 +54,7 @@ function Profile({ name }: ProfileProps) {
                 </TextDefault>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.editButton}
-              // onPress={() => navigation.navigate('EditProfile')}
-            >
+            <TouchableOpacity style={styles.editButton} onPress={onPressEditProfile}>
               <TextDefault textColor={COLORS.buttonbackground}>Edit Profile</TextDefault>
             </TouchableOpacity>
           </View>
@@ -60,6 +62,11 @@ function Profile({ name }: ProfileProps) {
         <TextDefault H4 bold style={[alignment.MBxSmall, alignment.PLsmall, alignment.MTsmall]}>
           {name}
         </TextDefault>
+        {description && (
+          <TextDefault bold style={[alignment.PLsmall]}>
+            {description}
+          </TextDefault>
+        )}
       </View>
     </View>
   );

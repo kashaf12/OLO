@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { Href, useRouter } from 'expo-router';
 import React from 'react';
 
 import { ACCOUNT_SCREENS } from '@/constants';
@@ -10,14 +10,13 @@ const Page = () => {
   const { signOut } = useAuth();
 
   const handleLogout = () => {
-    console.log('yoyoo');
     signOut();
     router.dismissAll();
   };
   return (
     <Settings
-      onPressPrivacy={() => router.navigate(ACCOUNT_SCREENS.PRIVACY)}
-      onPressNotification={() => router.navigate(ACCOUNT_SCREENS.NOTIFICATIONS)}
+      onPressPrivacy={() => router.navigate(ACCOUNT_SCREENS.PRIVACY as Href)}
+      onPressNotification={() => router.navigate(ACCOUNT_SCREENS.NOTIFICATIONS as Href)}
       onPressLogout={handleLogout}
     />
   );

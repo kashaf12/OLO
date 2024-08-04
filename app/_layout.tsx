@@ -1,5 +1,5 @@
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { SplashScreen, Stack, useRouter, useSegments } from 'expo-router';
+import { Href, SplashScreen, Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { BackHandler } from 'react-native';
@@ -7,7 +7,7 @@ import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { BASE_SCREENS, COLORS, TAB_SCREENS } from '@/constants';
-import { useAuth, useInitializeAuth } from '@/hooks';
+import { useAuth, useInitializeAuth, useInitializeUser } from '@/hooks';
 import { useLocationStore } from '@/store';
 import { exitAlert } from '@/utils';
 
@@ -15,6 +15,8 @@ SplashScreen.preventAutoHideAsync();
 
 export default function ApplicationNavigator() {
   useInitializeAuth(); // This will set up the auth listener
+  useInitializeUser(); // This will set up the user listener
+
   const [isAppReady, setAppReady] = useState(false);
   const locationIsSet = useLocationStore((state) => state.isSet);
   const { user, isLoading: authLoading, authSkipped } = useAuth();
@@ -41,11 +43,11 @@ export default function ApplicationNavigator() {
     const inLocationGroup = segments[0] === BASE_SCREENS.LOCATION_SCREENS;
 
     if (!user && !authSkipped && !inAuthGroup) {
-      router.replace(BASE_SCREENS.AUTHENTICATION);
+      router.replace(BASE_SCREENS.AUTHENTICATION as Href<string>);
     } else if ((user || authSkipped) && !locationIsSet && !inLocationGroup) {
-      router.replace(BASE_SCREENS.LOCATION_SCREENS);
+      router.replace(BASE_SCREENS.LOCATION_SCREENS as Href<string>);
     } else if ((user || authSkipped) && locationIsSet && (inAuthGroup || inLocationGroup)) {
-      router.replace(`${BASE_SCREENS.TAB_SCREENS}/${TAB_SCREENS.HOME}`);
+      router.replace(`${BASE_SCREENS.TAB_SCREENS}/${TAB_SCREENS.HOME}` as Href<string>);
     }
   }, [isAppReady, authLoading, user, locationIsSet, segments, authSkipped]);
 
