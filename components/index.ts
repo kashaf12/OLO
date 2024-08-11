@@ -6,6 +6,7 @@ import {
   DisconnectButton,
 } from './Buttons';
 import { FollowerCard, FollowingCard } from './Card';
+import { CategoryPicker } from './CategoryPicker';
 import CurrentLocationComponent from './CurrentLocation';
 import CustomMarker from './CustomMarker';
 import FlashMessage from './FlashMessage';
@@ -28,6 +29,7 @@ import { Spinner } from './Spinner';
 import { TextDefault, TextError, TextTimer } from './Text';
 
 export {
+  CategoryPicker,
   SkipButton,
   LoginButton,
   SearchModal,

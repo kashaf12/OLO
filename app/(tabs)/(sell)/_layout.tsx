@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-import { BackButton } from '@/components';
+import { LeftButton } from '@/components';
 import { COLORS, SELL_SCREENS } from '@/constants';
 import { textStyles } from '@/utils';
 
@@ -18,7 +18,7 @@ export default function SellLayout() {
           ...textStyles.H3,
           ...textStyles.Bold,
         },
-        headerLeft: () => <BackButton iconColor={COLORS.headerText} icon="leftArrow" />,
+        headerLeft: () => <LeftButton iconColor={COLORS.headerText} icon="leftArrow" />,
       }}>
       <Stack.Screen name={SELL_SCREENS.SELL} />
       <Stack.Screen name={SELL_SCREENS.CATEGORIES} options={{ title: 'Choose a category' }} />

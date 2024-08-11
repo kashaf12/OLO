@@ -25,6 +25,7 @@ import {
   SellingForm,
   SubCategories,
   UploadImages,
+  SellingFormUpdated,
 } from './SellStack';
 
 export {
@@ -55,4 +56,5 @@ export {
   LocationConfirm,
   OtpVerification,
   EditProfile,
+  SellingFormUpdated,
 };

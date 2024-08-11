@@ -1,33 +1,23 @@
-import { useNavigation, useRouter } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import React, { useLayoutEffect } from 'react';
 
 import { LeftButton } from '@/components';
-import { COLORS, SELL_SCREENS } from '@/constants';
-import { Categories } from '@/screens';
+import { COLORS } from '@/constants';
+import { SellingFormUpdated } from '@/screens';
 
 const Page = () => {
   const navigation = useNavigation();
-  const router = useRouter();
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: 'What are you offering?',
+      title: 'Create New Listing',
       headerLeft: () => <LeftButton icon="close" iconColor={COLORS.headerText} />,
     });
   }, [navigation]);
 
-  const handleOnPressCategory = ({ title, id }: { title: string; id: string }) => {
-    router.navigate({
-      pathname: SELL_SCREENS.SUB_CATEGORIES,
-      params: {
-        headerTitle: title,
-        categoryId: id,
-      },
-    });
-  };
+  const onNext = console.log;
 
-  // return <MainSell onPressCategory={handleOnPressCategory} />;
-
-  return <Categories onPressCategory={handleOnPressCategory} />;
+  return <SellingFormUpdated onPressNext={onNext} />;
 };
 
 export default Page;

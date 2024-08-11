@@ -5,7 +5,7 @@ import {
   MaterialCommunityIcons,
   SimpleLineIcons,
 } from '@expo/vector-icons';
-import { Tabs, useRouter } from 'expo-router';
+import { Href, Tabs, useRouter } from 'expo-router';
 
 import { COLORS, FONT_STYLES, TAB_SCREENS, TAB_LABELS, BASE_SCREENS } from '@/constants';
 import { useAuth } from '@/hooks';
@@ -20,7 +20,7 @@ export default function TabLayout() {
 
     if (!user && restrictedTabs.includes(tabName)) {
       setAuthSkipped(false);
-      router.push(BASE_SCREENS.AUTHENTICATION);
+      router.push(BASE_SCREENS.AUTHENTICATION as Href<string>);
       return false; // Prevent default navigation
     }
     return true; // Allow default navigation

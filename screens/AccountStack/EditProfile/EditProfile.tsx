@@ -79,7 +79,7 @@ const EditProfile = React.forwardRef<EditProfileI, EditProfileProps>(
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
           allowsEditing: true,
           aspect: [1, 1],
-          quality: 1,
+          quality: 0.5,
         });
         if (!result.canceled && result.assets.length > 0) {
           await saveImage(result.assets[0].uri);
@@ -99,7 +99,7 @@ const EditProfile = React.forwardRef<EditProfileI, EditProfileProps>(
           allowsEditing: true,
           cameraType: ImagePicker.CameraType.front,
           aspect: [1, 1],
-          quality: 1,
+          quality: 0.5,
         });
         if (!result.canceled && result.assets.length > 0) {
           await saveImage(result.assets[0].uri);

@@ -1,0 +1,174 @@
+{
+  "Property": {
+    "Commercial for sale": [
+      {
+        "id": "propertyType",
+        "label": "Property Type",
+        "type": "select",
+        "options": ["Office", "Retail", "Industrial", "Land"]
+      },
+      { "id": "areaSize", "label": "Area Size (sq ft)", "type": "number" },
+      { "id": "location", "label": "Location", "type": "text" },
+      { "id": "yearBuilt", "label": "Year Built", "type": "number" }
+    ],
+    "Commercial for rent": [
+      {
+        "id": "propertyType",
+        "label": "Property Type",
+        "type": "select",
+        "options": ["Office", "Retail", "Industrial"]
+      },
+      { "id": "areaSize", "label": "Area Size (sq ft)", "type": "number" },
+      {
+        "id": "rentalPeriod",
+        "label": "Rental Period",
+        "type": "select",
+        "options": ["Monthly", "Yearly"]
+      },
+      { "id": "location", "label": "Location", "type": "text" }
+    ],
+    "Residential for sale": [
+      {
+        "id": "propertyType",
+        "label": "Property Type",
+        "type": "select",
+        "options": ["Apartment", "House", "Villa"]
+      },
+      { "id": "bedrooms", "label": "Number of Bedrooms", "type": "number" },
+      { "id": "bathrooms", "label": "Number of Bathrooms", "type": "number" },
+      { "id": "areaSize", "label": "Area Size (sq ft)", "type": "number" },
+      { "id": "location", "label": "Location", "type": "text" }
+    ],
+    "Residential for rent": [
+      {
+        "id": "propertyType",
+        "label": "Property Type",
+        "type": "select",
+        "options": ["Apartment", "House", "Room"]
+      },
+      { "id": "bedrooms", "label": "Number of Bedrooms", "type": "number" },
+      {
+        "id": "rentalPeriod",
+        "label": "Rental Period",
+        "type": "select",
+        "options": ["Monthly", "Yearly"]
+      },
+      { "id": "location", "label": "Location", "type": "text" }
+    ],
+    "Plot": [
+      {
+        "id": "plotType",
+        "label": "Plot Type",
+        "type": "select",
+        "options": ["Residential", "Commercial", "Agricultural"]
+      },
+      { "id": "areaSize", "label": "Area Size (sq ft)", "type": "number" },
+      { "id": "location", "label": "Location", "type": "text" }
+    ]
+  },
+  "Electronics": {
+    "Television and audio": [
+      { "id": "brand", "label": "Brand", "type": "text" },
+      { "id": "model", "label": "Model", "type": "text" },
+      { "id": "screenSize", "label": "Screen Size (inches)", "type": "number" }
+    ],
+    "Computer and desktop": [
+      { "id": "brand", "label": "Brand", "type": "text" },
+      { "id": "processor", "label": "Processor", "type": "text" },
+      { "id": "ram", "label": "RAM (GB)", "type": "number" },
+      {
+        "id": "storageType",
+        "label": "Storage Type",
+        "type": "select",
+        "options": ["HDD", "SSD", "Both"]
+      }
+    ],
+    "Camera and projector": [
+      { "id": "brand", "label": "Brand", "type": "text" },
+      { "id": "model", "label": "Model", "type": "text" },
+      { "id": "megapixels", "label": "Megapixels", "type": "number" }
+    ],
+    "Computer spare parts": [
+      {
+        "id": "partType",
+        "label": "Part Type",
+        "type": "select",
+        "options": ["CPU", "GPU", "RAM", "Motherboard", "Storage", "Other"]
+      },
+      { "id": "brand", "label": "Brand", "type": "text" },
+      { "id": "model", "label": "Model", "type": "text" }
+    ],
+    "Washing machine and home appliances": [
+      { "id": "applianceType", "label": "Appliance Type", "type": "text" },
+      { "id": "brand", "label": "Brand", "type": "text" },
+      { "id": "energyRating", "label": "Energy Rating", "type": "text" }
+    ],
+    "Commercial appliances": [
+      { "id": "applianceType", "label": "Appliance Type", "type": "text" },
+      { "id": "brand", "label": "Brand", "type": "text" },
+      { "id": "capacity", "label": "Capacity", "type": "text" }
+    ]
+  },
+  "Cars": {
+    "Commercial": [
+      { "id": "make", "label": "Make", "type": "text" },
+      { "id": "model", "label": "Model", "type": "text" },
+      { "id": "year", "label": "Year", "type": "number" },
+      { "id": "mileage", "label": "Mileage", "type": "number" },
+      {
+        "id": "fuelType",
+        "label": "Fuel Type",
+        "type": "select",
+        "options": ["Petrol", "Diesel", "Electric", "Hybrid"]
+      }
+    ],
+    "Personal": [
+      { "id": "make", "label": "Make", "type": "text" },
+      { "id": "model", "label": "Model", "type": "text" },
+      { "id": "year", "label": "Year", "type": "number" },
+      { "id": "mileage", "label": "Mileage", "type": "number" },
+      {
+        "id": "fuelType",
+        "label": "Fuel Type",
+        "type": "select",
+        "options": ["Petrol", "Diesel", "Electric", "Hybrid"]
+      },
+      {
+        "id": "transmission",
+        "label": "Transmission",
+        "type": "select",
+        "options": ["Manual", "Automatic"]
+      }
+    ]
+  },
+  "Services": {
+    "Professional Services": [
+      { "id": "serviceType", "label": "Service Type", "type": "text" },
+      { "id": "experience", "label": "Years of Experience", "type": "number" },
+      { "id": "availability", "label": "Availability", "type": "text" }
+    ],
+    "Labour Services": [
+      { "id": "serviceType", "label": "Service Type", "type": "text" },
+      { "id": "experience", "label": "Years of Experience", "type": "number" },
+      { "id": "availability", "label": "Availability", "type": "text" }
+    ]
+  },
+  "Mobile": {
+    "Accessories": [
+      { "id": "accessoryType", "label": "Accessory Type", "type": "text" },
+      { "id": "compatibility", "label": "Compatible With", "type": "text" }
+    ],
+    "Tablets": [
+      { "id": "brand", "label": "Brand", "type": "text" },
+      { "id": "model", "label": "Model", "type": "text" },
+      { "id": "storageCapacity", "label": "Storage Capacity (GB)", "type": "number" },
+      { "id": "screenSize", "label": "Screen Size (inches)", "type": "number" }
+    ],
+    "Phone": [
+      { "id": "brand", "label": "Brand", "type": "text" },
+      { "id": "model", "label": "Model", "type": "text" },
+      { "id": "storageCapacity", "label": "Storage Capacity (GB)", "type": "number" },
+      { "id": "color", "label": "Color", "type": "text" }
+    ]
+  }
+}
