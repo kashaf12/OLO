@@ -1,12 +1,12 @@
 import { useEffect, useCallback } from 'react';
 
-import { getUserInfo } from '@/services';
 import {
+  getUserInfo,
   getProfilePhotoUrl,
   listenToUserChanges,
   updateUserInfo,
   uploadProfilePhoto,
-} from '@/services/userService';
+} from '@/services';
 import { useAuthStore, useUserInfoStore } from '@/store';
 import { UserType } from '@/store/userInfo';
 
@@ -105,7 +105,6 @@ export const useUser = () => {
         if (imageUri) {
           downloadURL = await uploadProfilePhoto(user.uid, imageUri);
         }
-        console.log(downloadURL);
         await updateUser({ profilePhotoUrl: downloadURL });
         return downloadURL;
       } catch (error) {

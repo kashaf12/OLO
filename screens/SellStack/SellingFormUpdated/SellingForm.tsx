@@ -1,5 +1,5 @@
 import { Entypo } from '@expo/vector-icons';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -11,13 +11,20 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { ColorValueType, ErrorType, FormValueType, SellingFormProps } from './SellingForm.types';
+import {
+  ColorValueType,
+  ErrorType,
+  FormValueType,
+  SellingFormI,
+  SellingFormProps,
+} from './SellingForm.types';
 import styles from './styles';
 
 import {
   CategoryPicker,
   EmptyButton,
   FlashMessage,
+  HorizontalImagePreview,
   LocationPickerBottomSheet,
   TextDefault,
 } from '@/components';
@@ -37,7 +44,7 @@ const CONDITIONS = [
   },
 ];
 
-function SellingForm({ onPressNext }: SellingFormProps) {
+const SellingForm = React.forwardRef<SellingFormI, SellingFormProps>(({ onPressNext }, ref) => {
   const [margin, marginSetter] = useState(false);
   const [color, setColor] = useState<ColorValueType>({
     category: COLORS.fontMainColor,
@@ -45,6 +52,7 @@ function SellingForm({ onPressNext }: SellingFormProps) {
     description: COLORS.fontMainColor,
     location: COLORS.fontMainColor,
     price: COLORS.fontMainColor,
+    images: COLORS.fontMainColor,
   });
   const [value, setValue] = useState<FormValueType>({
     category: '',
@@ -52,6 +60,7 @@ function SellingForm({ onPressNext }: SellingFormProps) {
     description: '',
     price: '',
     location: null,
+    images: [],
   });
   const [error, setError] = useState<ErrorType | null>(null);
 
@@ -67,6 +76,22 @@ function SellingForm({ onPressNext }: SellingFormProps) {
       Keyboard.removeAllListeners('keyboardDidHide');
     };
   }, []);
+
+  const resetForm = () => {
+    setError(null);
+    setColor({
+      category: COLORS.fontMainColor,
+      title: COLORS.fontMainColor,
+      description: COLORS.fontMainColor,
+      location: COLORS.fontMainColor,
+      price: COLORS.fontMainColor,
+      images: COLORS.fontMainColor,
+    });
+
+    setValue({ category: '', title: '', description: '', price: '', location: null, images: [] });
+  };
+
+  useImperativeHandle(ref, () => ({ resetForm }), [resetForm]);
 
   function _keyboardDidShow() {
     marginSetter(true);
@@ -91,10 +116,15 @@ function SellingForm({ onPressNext }: SellingFormProps) {
       error.category = 'This is mandatory. Please complete the required field.';
       result = false;
     }
+    if (!Array.isArray(value.images) || value.images.length < 1) {
+      error.images = 'This is mandatory. Please add atleast 1 image.';
+      result = false;
+    }
     if (!value?.location) {
       error.location = 'This is mandatory. Please complete the required field.';
       result = false;
     }
+
     setError(error);
     return result;
   }
@@ -263,6 +293,28 @@ function SellingForm({ onPressNext }: SellingFormProps) {
             </View>
             <View style={[styles.width100, styles.subContainer, styles.innerGrouping]}>
               <TextDefault
+                textColor={error?.images ? COLORS.google : COLORS.fontMainColor}
+                H5
+                bold
+                style={styles.width100}>
+                Images *
+              </TextDefault>
+              <View style={[]}>
+                <HorizontalImagePreview
+                  imagesUri={value.images || []}
+                  setImagesUri={(response) => {
+                    setValue({ ...value, images: response });
+                  }}
+                />
+              </View>
+              {error?.images && (
+                <TextDefault textColor={COLORS.google} style={styles.width100}>
+                  {error?.images}
+                </TextDefault>
+              )}
+            </View>
+            <View style={[styles.width100, styles.subContainer, styles.innerGrouping]}>
+              <TextDefault
                 textColor={error?.category ? COLORS.google : COLORS.fontMainColor}
                 H5
                 bold
@@ -309,7 +361,7 @@ function SellingForm({ onPressNext }: SellingFormProps) {
               )}
             </View>
             <View style={styles.buttonView}>
-              <EmptyButton title="Next" onPress={handleOnClickNext} />
+              <EmptyButton title="Upload Listing" onPress={handleOnClickNext} />
             </View>
           </View>
         </ScrollView>
@@ -317,5 +369,6 @@ function SellingForm({ onPressNext }: SellingFormProps) {
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
-}
+});
+
 export default React.memo(SellingForm);

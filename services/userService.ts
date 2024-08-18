@@ -7,9 +7,11 @@ import { UserType } from '@/store/userInfo';
 const MAX_RETRIES = 5;
 const RETRY_DELAY = 1000; // 1 second
 
+const USER_COLLECTION = 'User';
+
 export const getUserInfo = async (userId: string, retryCount = 0): Promise<UserType | null> => {
   try {
-    const userDoc = await firestore().collection('User').doc(userId).get();
+    const userDoc = await firestore().collection(USER_COLLECTION).doc(userId).get();
     if (userDoc.exists) {
       return userDoc.data() as UserType;
     } else {
@@ -18,7 +20,7 @@ export const getUserInfo = async (userId: string, retryCount = 0): Promise<UserT
         await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY));
         return getUserInfo(userId, retryCount + 1);
       } else {
-        console.log('Max retries reached. User not found.');
+        console.error('Max retries reached. User not found.');
         return null;
       }
     }
@@ -31,7 +33,7 @@ export const getUserInfo = async (userId: string, retryCount = 0): Promise<UserT
 export const updateUserInfo = async (userId: string, updates: Partial<UserType>): Promise<void> => {
   try {
     await firestore()
-      .collection('User')
+      .collection(USER_COLLECTION)
       .doc(userId)
       .update({
         ...updates,
@@ -49,11 +51,10 @@ export const listenToUserChanges = (
   onError: (error: Error) => void
 ) => {
   const unsubscribe = firestore()
-    .collection('User')
+    .collection(USER_COLLECTION)
     .doc(userId)
     .onSnapshot(
       (doc) => {
-        console.log('onSnapshot', doc);
         if (doc.exists) {
           const userData = doc.data() as UserType;
           onUpdate(userData);

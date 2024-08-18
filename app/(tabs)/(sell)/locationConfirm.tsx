@@ -1,4 +1,4 @@
-import { useNavigation, useRouter } from 'expo-router';
+import { Href, useNavigation, useRouter } from 'expo-router';
 import React, { useLayoutEffect } from 'react';
 
 import { SELL_SCREENS } from '@/constants';
@@ -28,7 +28,7 @@ const Page = () => {
         currentScreen: SELL_SCREENS.LOCATION_CONFIRM,
         title: 'Map',
       },
-    });
+    } as Href<string>);
   };
 
   return <LocationConfirm onPressFullMap={handleOnPressFullMap} defaultFormData={{}} />;

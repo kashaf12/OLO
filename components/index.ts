@@ -4,6 +4,7 @@ import {
   SkipButton,
   DefaultTextButton,
   DisconnectButton,
+  IconButton,
 } from './Buttons';
 import { FollowerCard, FollowingCard } from './Card';
 import { CategoryPicker } from './CategoryPicker';
@@ -11,6 +12,7 @@ import CurrentLocationComponent from './CurrentLocation';
 import CustomMarker from './CustomMarker';
 import FlashMessage from './FlashMessage';
 import { BackButton, LeftButton, RightButton, ModalHeader, MainHeader } from './Header';
+import HorizontalImagePreview from './HorizontalImagePreview';
 import LocationPermission from './LocationPermission';
 import LocationPickerBottomSheet from './LocationPickerBottomSheet';
 import {
@@ -61,4 +63,6 @@ export {
   CurrentLocationComponent,
   DisconnectButton,
   UploadImageModal,
+  IconButton,
+  HorizontalImagePreview,
 };
