@@ -1,14 +1,16 @@
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
-// import moment from 'moment';
-import React, { useState } from 'react';
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import { Platform, View, Image } from 'react-native';
 import { BaseButton, BorderlessButton, RectButton } from 'react-native-gesture-handler';
 
 import { CardProps } from './MainAds.types';
 import styles from './styles';
 
-import { FlashMessage, TextDefault, Spinner } from '@/components';
+import { FlashMessage, TextDefault } from '@/components';
 import { COLORS } from '@/constants';
+import { useUserAds } from '@/hooks';
 import { alignment, scale } from '@/utils';
 
 function Card({
@@ -16,8 +18,24 @@ function Card({
   onPressNavigateToSellingForm,
   ...props
 }: CardProps) {
+  const { getUserAdUrl } = useUserAds();
   const [deleteBox, setDeletebox] = useState(false);
   const [opacity, setopacity] = useState(1);
+  const [image, setImage] = useState<string>();
+
+  useEffect(() => {
+    let cancel = false;
+    if (Array.isArray(props?.images) && props.images.length > 0) {
+      getUserAdUrl(props.images[0].original).then((userAdUrl) => {
+        if (!cancel && userAdUrl) {
+          setImage(userAdUrl);
+        }
+      });
+    }
+    return () => {
+      cancel = true;
+    };
+  }, []);
 
   function onBoxToggle() {
     setDeletebox((prev) => !prev);
@@ -49,10 +67,9 @@ function Card({
     else setopacity(1);
   }
 
-  function getDate(date: any) {
-    // const formatDate = moment(+date).format('DD MMM YYYY');
-    // return formatDate;
-    return date;
+  function getDate(date: FirebaseFirestoreTypes.FieldValue) {
+    const formatDate = moment(date).format('DD MMM YYYY');
+    return formatDate;
   }
 
   function editAd() {
@@ -67,11 +84,11 @@ function Card({
           styles.adContainer,
           {
             borderLeftColor:
-              props.status === 'DEACTIVATED'
+              props.status === 'deactivated'
                 ? COLORS.google
-                : props.status === 'ACTIVE'
+                : props.status === 'active'
                   ? COLORS.activeLine
-                  : props.status === 'SOLD'
+                  : props.status === 'sold'
                     ? COLORS.selectedText
                     : COLORS.horizontalLine,
           },
@@ -106,18 +123,18 @@ function Card({
               <MaterialCommunityIcons name="dots-vertical" size={scale(20)} color="black" />
             </BorderlessButton>
             {/* ) : ( */}
-            <Spinner
-              style={{ alignItems: 'flex-end', ...alignment.PxSmall }}
-              spinnerColor={COLORS.spinnerColor1}
-              size="small"
-              backColor="transparent"
-            />
+            {/* <Spinner
+                style={{ alignItems: 'flex-end', ...alignment.PxSmall }}
+                spinnerColor={COLORS.spinnerColor1}
+                size="small"
+                backColor="transparent"
+              /> */}
             {/* )} */}
           </View>
 
           <View style={[styles.InfoContainer, { zIndex: 0 }]}>
             <Image
-              source={{ uri: props.images[0] }}
+              source={{ uri: image }}
               style={styles.imgResponsive}
               defaultSource={require('@/assets/default.png')}
             />
@@ -125,9 +142,7 @@ function Card({
               <View>
                 <TextDefault bold>{props.title}</TextDefault>
                 <TextDefault style={alignment.PTxSmall}>
-                  {/* {configuration.currencySymbol}  */}
-                  INR
-                  {props.price}
+                  {/* {configuration.currencySymbol}  */}₹ {props.price}
                 </TextDefault>
               </View>
               <View style={styles.locationRow}>
@@ -138,19 +153,17 @@ function Card({
                     color={COLORS.headerText}
                   />
                   <TextDefault numberOfLines={1} small bold style={styles.locationText}>
-                    {'Views:'}{' '}
+                    Views:
                     <TextDefault small light>
-                      {' '}
-                      {props.status === 'PENDING' ? '-' : props.views}
+                      {['pending', 'created'].includes(props.status) ? '-' : props.views}
                     </TextDefault>
                   </TextDefault>
                 </View>
                 <FontAwesome name="heart" size={scale(13)} color={COLORS.headerText} />
                 <TextDefault numberOfLines={1} small bold style={styles.locationText}>
-                  {'Likes:'}{' '}
+                  Likes:
                   <TextDefault small light>
-                    {' '}
-                    {props.likesCount}
+                    {props?.likesCount || 0}
                   </TextDefault>
                 </TextDefault>
               </View>
@@ -160,19 +173,19 @@ function Card({
             <View
               style={[
                 styles.statusBox,
-                props.status === 'DEACTIVATED'
+                props.status === 'deactivated'
                   ? styles.deactivateStatus
-                  : props.status === 'ACTIVE'
+                  : props.status === 'active'
                     ? styles.activeStatus
-                    : props.status === 'SOLD'
+                    : props.status === 'sold'
                       ? styles.soldStatus
                       : styles.pendingStatus,
               ]}>
               <TextDefault
                 textColor={
-                  props.status === 'PENDING' ||
-                  props.status === 'SOLD' ||
-                  props.status === 'DEACTIVATED'
+                  props.status === 'pending' ||
+                  props.status === 'sold' ||
+                  props.status === 'deactivated'
                     ? COLORS.white
                     : COLORS.fontMainColor
                 }
@@ -183,9 +196,9 @@ function Card({
               </TextDefault>
             </View>
             <TextDefault style={alignment.MTxSmall}>
-              {props.status === 'DEACTIVATED'
+              {props.status === 'deactivated'
                 ? 'This ad is currently deactivated'
-                : props.status === 'ACTIVE'
+                : props.status === 'active'
                   ? 'This ad is currently live'
                   : 'This ad is being processed and it will be live soon'}
             </TextDefault>
@@ -221,13 +234,13 @@ function Card({
               <RectButton
                 style={alignment.Psmall}
                 onPress={() =>
-                  updateStatus(props.status === 'DEACTIVATED' ? 'ACTIVE' : 'DEACTIVATED')
+                  updateStatus(props.status === 'deactivated' ? 'active' : 'deactivated')
                 }>
                 <TextDefault H5 bold uppercase>
-                  {props.status === 'DEACTIVATED' ? 'Activate' : 'Deactivate'}
+                  {props.status === 'deactivated' ? 'Activate' : 'Deactivate'}
                 </TextDefault>
               </RectButton>
-              <RectButton style={alignment.Psmall} onPress={() => updateStatus('SOLD')}>
+              <RectButton style={alignment.Psmall} onPress={() => updateStatus('sold')}>
                 <TextDefault H5 bold uppercase>
                   Mark as sold
                 </TextDefault>

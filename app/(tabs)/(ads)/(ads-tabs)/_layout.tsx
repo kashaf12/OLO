@@ -32,7 +32,12 @@ export default function TabLayout() {
           height: scale(2),
         },
       }}>
-      <MaterialTopTabs.Screen name={ADS_TAB_SCREENS.ADS} />
+      <MaterialTopTabs.Screen
+        name={ADS_TAB_SCREENS.ADS}
+        options={{
+          title: 'LISTINGS',
+        }}
+      />
       <MaterialTopTabs.Screen name={ADS_TAB_SCREENS.FAVOURITE} />
     </MaterialTopTabs>
   );

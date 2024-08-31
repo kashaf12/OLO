@@ -1,3 +1,4 @@
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { create } from 'zustand';
 
 export interface LocationType {
@@ -23,7 +24,14 @@ export interface ImageType {
   thumbnail?: string;
 }
 
-export type StatusType = 'created' | 'pending' | 'approved' | 'rejected';
+export type StatusType =
+  | 'created'
+  | 'pending'
+  | 'approved'
+  | 'rejected'
+  | 'deactivated'
+  | 'active'
+  | 'sold';
 
 export interface AiCheckResultType {
   passed: boolean;
@@ -40,9 +48,11 @@ export interface AdType {
   location: LocationType;
   images: ImageType[];
   status: StatusType;
-  createdAt: string;
-  updatedAt: string;
-  reviewedAt?: string;
+  createdAt: FirebaseFirestoreTypes.FieldValue;
+  updatedAt: FirebaseFirestoreTypes.FieldValue;
+  views: number;
+  likesCount: number;
+  reviewedAt?: FirebaseFirestoreTypes.FieldValue;
   reviewNotes?: string;
   aiCheckResult?: AiCheckResultType;
 }

@@ -11,7 +11,7 @@ import {
   updateAdLocation,
   uploadAdImages,
 } from '@/services';
-import { createAnduploadAdWithImages } from '@/services/userAdsService';
+import { createAnduploadAdWithImages, getAdUrl } from '@/services/userAdsService';
 import { useAuthStore, useUserAdsStore } from '@/store';
 import { AdType, LocationType } from '@/store/userAds';
 
@@ -218,7 +218,7 @@ export const useUserAds = () => {
         path: string;
         ext: string;
       }[],
-      adData: Omit<AdType, 'status' | 'createdAt' | 'updatedAt' | 'id'>
+      adData: Omit<AdType, 'status' | 'createdAt' | 'updatedAt' | 'id' | 'likesCount' | 'views'>
     ) => {
       if (!user) {
         throw new Error('No authenticated user');
@@ -239,6 +239,10 @@ export const useUserAds = () => {
     [user, setIsLoading, setError]
   );
 
+  const getUserAdUrl = useCallback((path: string) => {
+    return getAdUrl(path);
+  }, []);
+
   return {
     ads,
     isLoading,
@@ -251,6 +255,7 @@ export const useUserAds = () => {
     updateUserAdLocation,
     changeUserAdStatus,
     createUserAdWithImage,
+    getUserAdUrl,
   };
 };
 

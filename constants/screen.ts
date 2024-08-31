@@ -66,14 +66,6 @@ export const NETWORK_SCREENS = {
 
 export const SELL_SCREENS = {
   SELL: 'index',
-  CATEGORIES: 'categories',
-  SUB_CATEGORIES: 'subCategories',
-  FULL_MAP: 'fullMap',
-  LOCATION_CONFIRM: 'locationConfirm',
-  PRICE: 'price',
-  SELLING_FORM: 'sellingForm',
-  UPLOAD_IMAGE: 'uploadImage',
-  PRODUCT_DESCRIPTION: '(product-description-tabs)',
 };
 
 export const PRODUCT_DESCRIPTION_SCREENS = {

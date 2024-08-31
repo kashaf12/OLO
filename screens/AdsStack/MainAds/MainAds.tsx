@@ -10,7 +10,7 @@ import { AddFilter, EmptyButton, TextDefault } from '@/components';
 import { COLORS } from '@/constants';
 import { alignment, scale } from '@/utils';
 
-function Ads({ refetch, onPressStartSelling, data }: AdsProps) {
+function Ads({ refetch, onPressStartSelling, userListedAds }: AdsProps) {
   const [visible, setVisible] = useState(false);
   const [filter, setFilter] = useState({
     value: 'ALL',
@@ -22,18 +22,17 @@ function Ads({ refetch, onPressStartSelling, data }: AdsProps) {
   }
 
   function search(filter: { value: string; title: string }) {
-    const queryData = data?.itemsByUser || [];
     if (filter.value === 'ALL') {
-      return queryData;
+      return userListedAds;
     } else if (filter.value === 'INACTIVE') {
-      const ads = queryData?.filter((item: { status: string }) => {
+      const ads = userListedAds?.filter((item: { status: string }) => {
         if (item.status === 'SOLD' || item.status === 'DEACTIVATED') {
           return item;
         }
       });
       return ads;
     } else {
-      const ads = queryData?.filter((item: { status: string }) => {
+      const ads = userListedAds?.filter((item: { status: string }) => {
         if (item.status === filter.value) {
           return item;
         }
@@ -42,7 +41,7 @@ function Ads({ refetch, onPressStartSelling, data }: AdsProps) {
     }
   }
 
-  const filteredData = data?.itemsByUser ? search(filter) : [];
+  const filteredData = userListedAds ? search(filter) : [];
 
   function emptyView() {
     return (
@@ -79,7 +78,7 @@ function Ads({ refetch, onPressStartSelling, data }: AdsProps) {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={emptyView}
         ListHeaderComponent={header}
-        keyExtractor={(item, index) => item.id}
+        keyExtractor={(item) => item.id}
         stickyHeaderIndices={[0]}
         refreshControl={
           <RefreshControl
@@ -92,13 +91,17 @@ function Ads({ refetch, onPressStartSelling, data }: AdsProps) {
             }}
           />
         }
-        renderItem={({ item, index }) => (
-          <Card
-            {...item}
-            onPressNavigateToPrductDescription={console.log}
-            onPressNavigateToSellingForm={console.log}
-          />
-        )}
+        renderItem={({ item }) => {
+          console.log(item);
+
+          return (
+            <Card
+              {...item}
+              onPressNavigateToPrductDescription={console.log}
+              onPressNavigateToSellingForm={console.log}
+            />
+          );
+        }}
       />
 
       <AddFilter visible={visible} onModalToggle={onModalToggle} setFilter={setFilter} />

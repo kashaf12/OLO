@@ -1,3 +1,4 @@
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { create } from 'zustand';
 
 export interface StatsType {
@@ -13,9 +14,9 @@ export interface UserType {
   email: string | null;
   description: string | null;
   phoneNumber: string | null;
-  createdAt: string;
-  updatedAt: string;
-  lastLoginAt: string;
+  createdAt: FirebaseFirestoreTypes.FieldValue;
+  updatedAt: FirebaseFirestoreTypes.FieldValue;
+  lastLoginAt: FirebaseFirestoreTypes.FieldValue;
   isActive: boolean;
   stats: StatsType | null;
   profilePhotoUrl?: string | null;

@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-import { BackButton } from '@/components';
+import { LeftButton } from '@/components';
 import { ADS_SCREENS, COLORS } from '@/constants';
 import { textStyles } from '@/utils';
 
@@ -18,7 +18,7 @@ export default function ChatLayout() {
           ...textStyles.H3,
           ...textStyles.Bold,
         },
-        headerLeft: () => <BackButton iconColor={COLORS.headerText} icon="leftArrow" />,
+        headerLeft: () => <LeftButton iconColor={COLORS.headerText} icon="back" />,
       }}>
       <Stack.Screen
         name={ADS_SCREENS.MAIN_ADS}

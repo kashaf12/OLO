@@ -22,7 +22,9 @@ export const createAd = async (
     userId,
     createdAt,
     updatedAt: createdAt,
-    status: 'created',
+    status: 'pending',
+    views: 0,
+    likesCount: 0,
   });
 
   return adRef.id;
@@ -111,7 +113,10 @@ export const uploadAdImages = async (
 
 export const createAnduploadAdWithImages = async (
   userId: string,
-  adData: Omit<AdType, 'createdAt' | 'updatedAt' | 'status' | 'images' | 'id'>,
+  adData: Omit<
+    AdType,
+    'createdAt' | 'updatedAt' | 'status' | 'images' | 'id' | 'likesCount' | 'views'
+  >,
   images: {
     id: string;
     name: string;
@@ -152,7 +157,9 @@ export const createAnduploadAdWithImages = async (
       userId,
       createdAt,
       updatedAt: createdAt,
-      status: 'created',
+      status: 'pending',
+      views: 0,
+      likesCount: 0,
     });
     return adId;
   } catch (err) {
@@ -188,4 +195,15 @@ export const listenToUserAds = (
       );
       callback(ads);
     });
+};
+
+export const getAdUrl = async (path: string): Promise<string | null> => {
+  try {
+    const reference = storage().ref(path);
+    const downloadURL = await reference.getDownloadURL();
+    return downloadURL;
+  } catch (error) {
+    console.error('Error getting ad URL:', error);
+    return null;
+  }
 };
