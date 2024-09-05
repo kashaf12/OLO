@@ -19,7 +19,9 @@ export interface UserType {
   lastLoginAt: FirebaseFirestoreTypes.FieldValue;
   isActive: boolean;
   stats: StatsType | null;
-  profilePhotoUrl?: string | null;
+  isProfilePicAvailable: boolean;
+  profilePhotoThumbnail: string | null;
+  profilePhotoOriginal: string | null;
 }
 
 interface UserInfoState {

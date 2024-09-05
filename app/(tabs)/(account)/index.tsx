@@ -28,7 +28,6 @@ const Page = () => {
       onPressLogin={handleOnPressLogin}
       isAuthenticated={isAuthenticated}
       userName={isLoading ? 'Loading...' : user?.displayName}
-      profilePhotoUrl={user?.profilePhotoUrl}
       description={user?.description}
     />
   );

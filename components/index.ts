@@ -27,6 +27,7 @@ import {
 import { UploadImageModal } from './Modal/UploadImageModal';
 import { OtpInputContainer } from './OtpInputContainer';
 import { PhoneNumberInput } from './PhoneNumberInput';
+import { ProfilePicture } from './ProfilePicture';
 import { Spinner } from './Spinner';
 import { TextDefault, TextError, TextTimer } from './Text';
 
@@ -65,4 +66,5 @@ export {
   UploadImageModal,
   IconButton,
   HorizontalImagePreview,
+  ProfilePicture,
 };

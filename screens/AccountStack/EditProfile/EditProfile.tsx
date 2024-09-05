@@ -2,7 +2,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import {
-  Image,
   ScrollView,
   TextInput,
   TouchableOpacity,
@@ -16,11 +15,15 @@ import {
 import { EditProfileI, EditProfileProps } from './EditProfile.types';
 import styles from './styles';
 
-import { DisconnectButton, EmptyButton, TextDefault, UploadImageModal } from '@/components';
+import {
+  DisconnectButton,
+  EmptyButton,
+  ProfilePicture,
+  TextDefault,
+  UploadImageModal,
+} from '@/components';
 import { COLORS } from '@/constants';
 import { alignment, scale } from '@/utils';
-
-const IMAGE_PLACEHOLDER = require('@/assets/avatar.png');
 
 const EditProfile = React.forwardRef<EditProfileI, EditProfileProps>(
   ({ user, saveImageOnBackend }, ref) => {
@@ -31,7 +34,7 @@ const EditProfile = React.forwardRef<EditProfileI, EditProfileProps>(
     const [description, setDescription] = useState(user?.description || '');
     const [nameError, setNameError] = useState<string | null>(null);
     const [margin, marginSetter] = useState(false);
-    const [image, setImage] = useState<string | null>(user?.profilePhotoUrl || null);
+    const [image, setImage] = useState<string | null>(null);
     const [imageUploading, setImageUploading] = useState(false);
     const onSave = () => {
       if (validation()) {
@@ -173,10 +176,10 @@ const EditProfile = React.forwardRef<EditProfileI, EditProfileProps>(
                 </TextDefault>
                 <View style={styles.upperContainer}>
                   <View style={styles.imageContainer}>
-                    <Image
-                      style={styles.imgResponsive}
-                      source={image ? { uri: image } : IMAGE_PLACEHOLDER}
-                      resizeMode="cover"
+                    <ProfilePicture
+                      size={scale(90)}
+                      style={styles.imageContainer}
+                      localImageUrl={image}
                     />
                     <TouchableOpacity style={styles.editButton} onPress={() => setShowModal(true)}>
                       <MaterialCommunityIcons

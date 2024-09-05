@@ -11,7 +11,9 @@ import {
 } from './userAdsService';
 import {
   getUserInfo,
-  getProfilePhotoUrl,
+  getProfilePhotoUrls,
+  getProfilePhotoOriginal,
+  getProfilePhotoThumbnail,
   listenToUserChanges,
   updateUserInfo,
   uploadProfilePhoto,
@@ -19,7 +21,9 @@ import {
 
 export {
   getUserInfo,
-  getProfilePhotoUrl,
+  getProfilePhotoUrls,
+  getProfilePhotoOriginal,
+  getProfilePhotoThumbnail,
   listenToUserChanges,
   updateUserInfo,
   uploadProfilePhoto,

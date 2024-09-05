@@ -2,10 +2,10 @@ import { useEffect, useCallback } from 'react';
 
 import {
   getUserInfo,
-  getProfilePhotoUrl,
   listenToUserChanges,
   updateUserInfo,
   uploadProfilePhoto,
+  getProfilePhotoUrls,
 } from '@/services';
 import { useAuthStore, useUserInfoStore } from '@/store';
 import { UserType } from '@/store/userInfo';
@@ -105,7 +105,14 @@ export const useUser = () => {
         if (imageUri) {
           downloadURL = await uploadProfilePhoto(user.uid, imageUri);
         }
-        await updateUser({ profilePhotoUrl: downloadURL });
+
+        const profileImageUrls = await getProfileImage();
+
+        await updateUser({
+          isProfilePicAvailable: !!downloadURL,
+          profilePhotoOriginal: profileImageUrls?.[1] || downloadURL,
+          profilePhotoThumbnail: profileImageUrls?.[0] || downloadURL,
+        });
         return downloadURL;
       } catch (error) {
         console.error('Error uploading profile image:', error);
@@ -121,8 +128,14 @@ export const useUser = () => {
     }
 
     try {
-      const photoUrl = await getProfilePhotoUrl(user.uid);
-      return photoUrl;
+      const photoUrls = await getProfilePhotoUrls(user.uid);
+
+      await updateUser({
+        isProfilePicAvailable: !!photoUrls,
+        profilePhotoOriginal: photoUrls?.[1],
+        profilePhotoThumbnail: photoUrls?.[0],
+      });
+      return photoUrls;
     } catch (error) {
       console.error('Error getting profile image:', error);
       return null;

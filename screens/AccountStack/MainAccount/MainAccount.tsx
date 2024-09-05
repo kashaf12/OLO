@@ -1,11 +1,11 @@
 import { AntDesign, Entypo, FontAwesome5, Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Image, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import { MainAccountProps } from './MainAccount.types';
 import styles from './styles';
 
-import { EmptyButton, TextDefault } from '@/components';
+import { EmptyButton, ProfilePicture, TextDefault } from '@/components';
 import { COLORS } from '@/constants';
 import { alignment, scale } from '@/utils';
 
@@ -17,19 +17,12 @@ function MainAccount({
   isAuthenticated,
   userName,
   onPressLogin,
-  profilePhotoUrl = null,
   description = null,
 }: MainAccountProps) {
   return (
     <View style={[styles.flex, styles.container]}>
       <View style={styles.profileContainer}>
-        <View style={styles.imageContainer}>
-          <Image
-            style={styles.imgResponsive}
-            source={profilePhotoUrl ? { uri: profilePhotoUrl } : require('@/assets/avatar.png')}
-            resizeMode="cover"
-          />
-        </View>
+        <ProfilePicture size={scale(90)} style={styles.imageContainer} />
         <View style={[styles.flex, styles.profileInfo]}>
           <TextDefault H4 bold>
             {!isAuthenticated ? 'Log in' : userName}

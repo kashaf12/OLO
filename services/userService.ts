@@ -3,6 +3,7 @@ import storage from '@react-native-firebase/storage';
 import { Platform } from 'react-native';
 
 import { UserType } from '@/store/userInfo';
+import { getFileExtension } from '@/utils';
 
 const MAX_RETRIES = 5;
 const RETRY_DELAY = 1000; // 1 second
@@ -72,7 +73,13 @@ export const listenToUserChanges = (
 
 export const uploadProfilePhoto = async (userId: string, uri: string): Promise<string> => {
   try {
-    const filename = `profile_photos/${userId}/profile_photo.jpg`;
+    const extension = getFileExtension(uri);
+    if (!extension) {
+      console.error('Error uploading profile photo: No extension found');
+      throw new Error('Error uploading profile photo: No extension found');
+    }
+
+    const filename = `profile_photos/${userId}/profile_photo`;
     const reference = storage().ref(filename);
 
     if (Platform.OS === 'ios') {
@@ -91,14 +98,29 @@ export const uploadProfilePhoto = async (userId: string, uri: string): Promise<s
   }
 };
 
-export const getProfilePhotoUrl = async (userId: string): Promise<string | null> => {
+export const getProfilePhotoUrls = async (userId: string): Promise<(string | null)[]> =>
+  Promise.all([getProfilePhotoThumbnail(userId), getProfilePhotoOriginal(userId)]);
+
+export const getProfilePhotoThumbnail = async (userId: string): Promise<string | null> => {
   try {
-    const filename = `profile_photos/${userId}/profile_photo.jpg`;
+    const filename = `profile_photos/${userId}/profile_photo_200x200`;
     const reference = storage().ref(filename);
     const downloadURL = await reference.getDownloadURL();
     return downloadURL;
   } catch (error) {
-    console.error('Error getting profile photo URL:', error);
+    console.error('Error getting thumbnail profile photo URL:', error);
+    return null;
+  }
+};
+
+export const getProfilePhotoOriginal = async (userId: string): Promise<string | null> => {
+  try {
+    const filename = `profile_photos/${userId}/profile_photo`;
+    const reference = storage().ref(filename);
+    const downloadURL = await reference.getDownloadURL();
+    return downloadURL;
+  } catch (error) {
+    console.error('Error getting original profile photo URL:', error);
     return null;
   }
 };

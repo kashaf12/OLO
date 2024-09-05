@@ -1,30 +1,19 @@
 import React from 'react';
-import { Image, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import { ProfileProps } from './Profile.types';
 import styles from './styles';
 
-import { TextDefault } from '@/components';
+import { ProfilePicture, TextDefault } from '@/components';
 import { COLORS } from '@/constants';
-import { alignment } from '@/utils';
+import { alignment, scale } from '@/utils';
 
-function Profile({
-  name,
-  onPressEditProfile,
-  profilePhotoUrl = null,
-  description = null,
-}: ProfileProps) {
+function Profile({ name, onPressEditProfile, description = null }: ProfileProps) {
   return (
     <View style={[styles.flex, styles.mainContainer]}>
       <View style={styles.profileContainer}>
         <View style={styles.upperContainer}>
-          <View style={styles.imageContainer}>
-            <Image
-              style={styles.imgResponsive}
-              source={profilePhotoUrl ? { uri: profilePhotoUrl } : require('@/assets/avatar.png')}
-              resizeMode="cover"
-            />
-          </View>
+          <ProfilePicture size={scale(90)} style={styles.imageContainer} />
           <View style={[styles.flex, styles.subContainer]}>
             <View style={styles.profileInfo}>
               <TouchableOpacity

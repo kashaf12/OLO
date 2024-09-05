@@ -50,7 +50,6 @@ const Page = () => {
     <Profile
       name={isLoading ? 'Loading...' : user?.displayName || ''}
       onPressEditProfile={() => router.navigate(ACCOUNT_SCREENS.EDIT_PROFILE as Href)}
-      profilePhotoUrl={user?.profilePhotoUrl}
       description={user?.description}
     />
   );
