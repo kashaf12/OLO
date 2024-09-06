@@ -9,11 +9,11 @@ import {
   listenToUserAds,
   updateAd,
   updateAdLocation,
-  uploadAdImages,
+  getAdImageUrl,
+  createAdWithImages,
 } from '@/services';
-import { createAnduploadAdWithImages, getAdUrl } from '@/services/userAdsService';
 import { useAuthStore, useUserAdsStore } from '@/store';
-import { AdType, LocationType } from '@/store/userAds';
+import { AdType, ImageType, LocationType } from '@/store/userAds';
 
 export const useInitializeUserAds = () => {
   const { user } = useAuthStore();
@@ -135,44 +135,6 @@ export const useUserAds = () => {
     [setAds, setIsLoading, setError]
   );
 
-  const uploadUserAdImages = useCallback(
-    async (
-      adId: string,
-      images: {
-        id: string;
-        name: string;
-        mime: string;
-        path: string;
-        ext: string;
-      }[]
-    ): Promise<
-      {
-        id: string;
-        original: string;
-        thumbnail: string;
-        name: string;
-        mime: string;
-      }[]
-    > => {
-      setIsLoading(true);
-      try {
-        const uploadedImages = await uploadAdImages(adId, images);
-        const updatedAds = ads.map((ad) =>
-          ad.id === adId ? { ...ad, images: [...ad.images, ...uploadedImages] } : ad
-        );
-        setAds(updatedAds);
-        return uploadedImages;
-      } catch (error) {
-        console.error('Error uploading ad images:', error);
-        setError(error instanceof Error ? error.message : 'Failed to upload ad images');
-        throw error;
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [setAds, setIsLoading, setError]
-  );
-
   const updateUserAdLocation = useCallback(
     async (adId: string, location: LocationType) => {
       setIsLoading(true);
@@ -211,21 +173,18 @@ export const useUserAds = () => {
 
   const createUserAdWithImage = useCallback(
     async (
-      images: {
-        id: string;
-        name: string;
-        mime: string;
-        path: string;
-        ext: string;
-      }[],
-      adData: Omit<AdType, 'status' | 'createdAt' | 'updatedAt' | 'id' | 'likesCount' | 'views'>
+      images: (Pick<ImageType, 'id' | 'name'> & { path: string })[],
+      adData: Omit<
+        AdType,
+        'status' | 'createdAt' | 'updatedAt' | 'id' | 'likesCount' | 'views' | 'images'
+      >
     ) => {
       if (!user) {
         throw new Error('No authenticated user');
       }
       setIsLoading(true);
       try {
-        return createAnduploadAdWithImages(user.uid, adData, images);
+        return createAdWithImages(user.uid, adData, images);
       } catch (error) {
         console.error('Error creating ad with images:', error);
         setError(
@@ -240,7 +199,7 @@ export const useUserAds = () => {
   );
 
   const getUserAdUrl = useCallback((path: string) => {
-    return getAdUrl(path);
+    return getAdImageUrl(path);
   }, []);
 
   return {
@@ -251,7 +210,6 @@ export const useUserAds = () => {
     createUserAd,
     updateUserAd,
     deleteUserAd,
-    uploadUserAdImages,
     updateUserAdLocation,
     changeUserAdStatus,
     createUserAdWithImage,

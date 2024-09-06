@@ -2,21 +2,95 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import { Platform } from 'react-native';
 
-import { AdType, LocationType } from '@/store/userAds';
+import { AdType, ImageType, LocationType } from '@/store/userAds';
 
 const ADS_COLLECTION = 'Ads';
 
-export const getNewDocAdId = async () => {
+export const uploadAdImage = async (
+  adId: string,
+  image: Pick<ImageType, 'id' | 'name'> & { path: string }
+): Promise<
+  { success: true; data: Pick<ImageType, 'id' | 'name'> } | { success: false; error: string }
+> => {
+  try {
+    const filename = `ads/${adId}/${image.id}`;
+    const reference = storage().ref(filename);
+
+    if (Platform.OS === 'ios') {
+      await reference.putFile(image.path);
+    } else {
+      const response = await fetch(image.path);
+      const blob = await response.blob();
+      await reference.put(blob);
+    }
+
+    return {
+      success: true,
+      data: {
+        id: image.id,
+        name: image.name,
+      },
+    };
+  } catch (error) {
+    let message = 'Failed to upload image';
+    if (error instanceof Error) {
+      message = `Failed to upload image: ${error.message}`;
+    }
+    console.error(message);
+    return {
+      success: false,
+      error: message,
+    };
+  }
+};
+
+export const createAdWithImages = async (
+  userId: string,
+  adData: Omit<
+    AdType,
+    'createdAt' | 'updatedAt' | 'status' | 'images' | 'id' | 'likesCount' | 'views'
+  >,
+  images: (Pick<ImageType, 'id' | 'name'> & { path: string })[]
+) => {
   const adRef = firestore().collection(ADS_COLLECTION).doc();
-  return adRef.id;
+  const createdAt = firestore.FieldValue.serverTimestamp();
+  const adId = adRef.id;
+
+  try {
+    const imagesData = await Promise.all(images.map((image) => uploadAdImage(adId, image)));
+
+    if (imagesData.some((image) => Boolean(!image.success))) {
+      throw new Error('Failed to upload ad images');
+    }
+
+    await adRef.set({
+      ...adData,
+      userId,
+      createdAt,
+      updatedAt: createdAt,
+      status: 'pending',
+      views: 0,
+      likesCount: 0,
+      images: imagesData.filter((image) => image.success).map((image) => image.data),
+    });
+
+    return adId;
+  } catch (err) {
+    console.error('Error uploading ads photo:', err);
+    throw new Error('Failed to uploading ads photo');
+  }
 };
 
 export const createAd = async (
   userId: string,
-  adData: Omit<AdType, 'createdAt' | 'updatedAt' | 'status'>
+  adData: Omit<
+    AdType,
+    'createdAt' | 'updatedAt' | 'status' | 'id' | 'likesCount' | 'views' | 'images'
+  >
 ): Promise<string> => {
   const adRef = firestore().collection(ADS_COLLECTION).doc();
   const createdAt = firestore.FieldValue.serverTimestamp();
+
   await adRef.set({
     ...adData,
     userId,
@@ -25,9 +99,18 @@ export const createAd = async (
     status: 'pending',
     views: 0,
     likesCount: 0,
+    images: [],
   });
 
   return adRef.id;
+};
+
+export const addImagesToAd = async (adId: string, images: ImageType[]): Promise<void> => {
+  const adRef = firestore().collection(ADS_COLLECTION).doc(adId);
+  await adRef.update({
+    images: firestore.FieldValue.arrayUnion(...images),
+    updatedAt: firestore.FieldValue.serverTimestamp(),
+  });
 };
 
 export const updateAd = async (adId: string, adData: Partial<AdType>): Promise<void> => {
@@ -41,6 +124,15 @@ export const updateAd = async (adId: string, adData: Partial<AdType>): Promise<v
 export const deleteAd = async (adId: string): Promise<void> => {
   const adRef = firestore().collection(ADS_COLLECTION).doc(adId);
   await adRef.delete();
+
+  // Delete associated images
+  const imagesRef = storage().ref(`ads/${adId}`);
+  try {
+    const files = await imagesRef.listAll();
+    await Promise.all(files.items.map((file) => file.delete()));
+  } catch (error) {
+    console.error('Error deleting ad images:', error);
+  }
 };
 
 export const getUserAds = async (userId: string): Promise<AdType[]> => {
@@ -65,109 +157,6 @@ export const getAdById = async (adId: string): Promise<AdType | null> => {
   return { id: adDoc.id, ...adDoc.data() } as AdType;
 };
 
-export const uploadAdImages = async (
-  adId: string,
-  images: {
-    id: string;
-    name: string;
-    mime: string;
-    path: string;
-    ext: string;
-  }[]
-): Promise<
-  {
-    id: string;
-    original: string;
-    thumbnail: string;
-    name: string;
-    mime: string;
-  }[]
-> => {
-  try {
-    return Promise.all(
-      images.map(async (image) => {
-        const filename = `ads/${adId}/original/${image.id}.${image.ext}`;
-        const reference = storage().ref(filename);
-        if (Platform.OS === 'ios') {
-          await reference.putFile(image.path);
-        } else {
-          const response = await fetch(image.path);
-          const blob = await response.blob();
-          await reference.put(blob);
-        }
-
-        return {
-          id: image.id,
-          original: `ads/${adId}/original/${image.id}.${image.ext}`,
-          thumbnail: `ads/${adId}/thumbnail/${image.id}.${image.ext}`,
-          name: image.name,
-          mime: image.mime,
-        };
-      })
-    );
-  } catch (err) {
-    console.error('Error uploading ads photo:', err);
-    throw new Error('Failed to uploading ads photo');
-  }
-};
-
-export const createAnduploadAdWithImages = async (
-  userId: string,
-  adData: Omit<
-    AdType,
-    'createdAt' | 'updatedAt' | 'status' | 'images' | 'id' | 'likesCount' | 'views'
-  >,
-  images: {
-    id: string;
-    name: string;
-    mime: string;
-    path: string;
-    ext: string;
-  }[]
-) => {
-  const adRef = firestore().collection(ADS_COLLECTION).doc();
-  const createdAt = firestore.FieldValue.serverTimestamp();
-  const adId = adRef.id;
-  try {
-    const imagesData = await Promise.all(
-      images.map(async (image) => {
-        const filename = `ads/${adId}/original/${image.id}.${image.ext}`;
-        const reference = storage().ref(filename);
-        if (Platform.OS === 'ios') {
-          await reference.putFile(image.path);
-        } else {
-          const response = await fetch(image.path);
-          const blob = await response.blob();
-          await reference.put(blob);
-        }
-
-        return {
-          id: image.id,
-          original: `ads/${adId}/original/${image.id}.${image.ext}`,
-          thumbnail: `ads/${adId}/thumbnail/${image.id}.${image.ext}`,
-          name: image.name,
-          mime: image.mime,
-        };
-      })
-    );
-    await adRef.set({
-      ...adData,
-      id: adId,
-      images: imagesData,
-      userId,
-      createdAt,
-      updatedAt: createdAt,
-      status: 'pending',
-      views: 0,
-      likesCount: 0,
-    });
-    return adId;
-  } catch (err) {
-    console.error('Error uploading ads photo:', err);
-    throw new Error('Failed to uploading ads photo');
-  }
-};
-
 export const updateAdLocation = async (adId: string, location: LocationType): Promise<void> => {
   await updateAd(adId, { location });
 };
@@ -186,7 +175,7 @@ export const listenToUserAds = (
     .orderBy('createdAt', 'desc')
     .onSnapshot((snapshot) => {
       if (!snapshot) return;
-      const ads = (snapshot?.docs || []).map(
+      const ads = snapshot.docs.map(
         (doc) =>
           ({
             id: doc.id,
@@ -197,11 +186,10 @@ export const listenToUserAds = (
     });
 };
 
-export const getAdUrl = async (path: string): Promise<string | null> => {
+export const getAdImageUrl = async (path: string): Promise<string | null> => {
   try {
     const reference = storage().ref(path);
-    const downloadURL = await reference.getDownloadURL();
-    return downloadURL;
+    return await reference.getDownloadURL();
   } catch (error) {
     console.error('Error getting ad URL:', error);
     return null;

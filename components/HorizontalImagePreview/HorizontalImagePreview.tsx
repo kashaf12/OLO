@@ -24,7 +24,17 @@ const HorizontalImagePreview: React.FC<HorizontalImagePreviewProps> = ({
       selectedColor: COLORS.buttonbackground,
     });
 
-    setImagesUri?.(response);
+    setImagesUri?.(
+      response.map((res) => {
+        if (`${res.mime}`.toLowerCase() === 'image/heic') {
+          return {
+            ...res,
+            mime: 'image/jpeg',
+          };
+        }
+        return res;
+      })
+    );
   };
   return (
     <View style={styles.container}>

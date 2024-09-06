@@ -18,10 +18,9 @@ export interface LocationType {
 
 export interface ImageType {
   id: string;
-  mime: string;
   name: string;
   original: string;
-  thumbnail?: string;
+  thumbnails?: string[];
 }
 
 export type StatusType =
@@ -66,7 +65,7 @@ interface UserAdsState {
   setError: (error: string | null) => void;
 }
 
-export const useUserAdsStore = create<UserAdsState>((set, get) => ({
+export const useUserAdsStore = create<UserAdsState>((set) => ({
   ads: [],
   isLoading: false,
   error: null,

@@ -50,7 +50,6 @@ const Page = () => {
           ...data.location?.coords,
           ...data.location?.address,
         } as LocationType,
-        images: [],
       };
 
       await createUserAdWithImage(imagesPayload, ad);

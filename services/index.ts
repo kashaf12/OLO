@@ -1,13 +1,16 @@
 import {
-  changeAdStatus,
+  uploadAdImage,
+  createAdWithImages,
   createAd,
-  deleteAd,
-  getAdById,
-  getUserAds,
-  listenToUserAds,
+  addImagesToAd,
   updateAd,
+  deleteAd,
+  getUserAds,
+  getAdById,
   updateAdLocation,
-  uploadAdImages,
+  changeAdStatus,
+  listenToUserAds,
+  getAdImageUrl,
 } from './userAdsService';
 import {
   getUserInfo,
@@ -35,5 +38,8 @@ export {
   listenToUserAds,
   updateAd,
   updateAdLocation,
-  uploadAdImages,
+  createAdWithImages,
+  getAdImageUrl,
+  addImagesToAd,
+  uploadAdImage,
 };
