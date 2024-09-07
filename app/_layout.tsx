@@ -7,7 +7,7 @@ import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { BASE_SCREENS, COLORS, TAB_SCREENS } from '@/constants';
-import { useAuth, useInitializeAuth, useInitializeUser, useInitializeUserAds } from '@/hooks';
+import { useAuth, useInitializeAuth, useInitializeUser } from '@/hooks';
 import { useLocationStore } from '@/store';
 import { exitAlert } from '@/utils';
 
@@ -16,7 +16,6 @@ SplashScreen.preventAutoHideAsync();
 export default function ApplicationNavigator() {
   useInitializeAuth(); // This will set up the auth listener
   useInitializeUser(); // This will set up the user listener
-  useInitializeUserAds(); // This will set up the user ads listener
 
   const [isAppReady, setAppReady] = useState(false);
   const locationIsSet = useLocationStore((state) => state.isSet);

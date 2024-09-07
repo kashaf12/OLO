@@ -2,7 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import { Platform } from 'react-native';
 
-import { AdType, ImageType, LocationType } from '@/store/userAds';
+import { AdType, ImageType, LocationType } from '@/store/ads';
 
 const ADS_COLLECTION = 'Ads';
 
@@ -165,33 +165,35 @@ export const changeAdStatus = async (adId: string, status: AdType['status']): Pr
   await updateAd(adId, { status });
 };
 
-export const listenToUserAds = (
-  userId: string,
-  callback: (ads: AdType[]) => void
-): (() => void) => {
-  return firestore()
-    .collection(ADS_COLLECTION)
-    .where('userId', '==', userId)
-    .orderBy('createdAt', 'desc')
-    .onSnapshot((snapshot) => {
-      if (!snapshot) return;
-      const ads = snapshot.docs.map(
-        (doc) =>
-          ({
-            id: doc.id,
-            ...doc.data(),
-          }) as AdType
-      );
-      callback(ads);
-    });
-};
-
-export const getAdImageUrl = async (path: string): Promise<string | null> => {
+export const getAdImageUrl = async (adId: string, imageId: string): Promise<string | null> => {
   try {
-    const reference = storage().ref(path);
+    const filename = `ads/${adId}/${imageId}`;
+    const reference = storage().ref(filename);
     return await reference.getDownloadURL();
   } catch (error) {
-    console.error('Error getting ad URL:', error);
+    console.error('Error getting ad image URL:', error);
+    return null;
+  }
+};
+
+export const getAdThumbnailUrl = async (adId: string, imageId: string): Promise<string | null> => {
+  try {
+    const filename = `ads/${adId}/${imageId}_300x300`;
+    const reference = storage().ref(filename);
+    return await reference.getDownloadURL();
+  } catch (error) {
+    console.error('Error getting ad thumbnail image URL:', error);
+    return null;
+  }
+};
+
+export const getAdCoverUrl = async (adId: string, imageId: string): Promise<string | null> => {
+  try {
+    const filename = `ads/${adId}/${imageId}_1200x1200`;
+    const reference = storage().ref(filename);
+    return await reference.getDownloadURL();
+  } catch (error) {
+    console.error('Error getting ad thumbnail image URL:', error);
     return null;
   }
 };

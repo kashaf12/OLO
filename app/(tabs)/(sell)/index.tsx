@@ -10,13 +10,13 @@ import {
   FormValueType,
   SellingFormI,
 } from '@/screens/SellStack/SellingFormUpdated/SellingForm.types';
-import { LocationType } from '@/store/userAds';
+import { LocationType } from '@/store/ads';
 import { getFileExtension } from '@/utils';
 
 const Page = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
-  const { createUserAdWithImage } = useUserAds();
+  const { createUserAdWithImage, fetchUserAds } = useUserAds();
   const router = useRouter();
   const ref = useRef<SellingFormI>(null);
 
@@ -54,6 +54,7 @@ const Page = () => {
 
       await createUserAdWithImage(imagesPayload, ad);
       ref?.current?.resetForm?.();
+      fetchUserAds();
       FlashMessage({
         message: 'Successfully Created AD',
         animated: true,

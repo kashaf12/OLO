@@ -192,7 +192,6 @@ function LocationConfirm({
               address: delivery_address,
             };
             if (formData) {
-              console.log(formData.location.value);
               onCreateAd?.({
                 _id: formData.id,
                 zone: formData.location.value,

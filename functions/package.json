@@ -10,6 +10,7 @@
     "deploy": "firebase deploy --only functions",
     "deploy:createUserDocumentOnSignUp": "firebase deploy --only functions:createUserDocumentOnSignUp",
     "deploy:generateResizedJpegOnUpload": "firebase deploy --only functions:generateResizedJpegOnUpload",
+    "deploy:processNewAd": "firebase deploy --only functions:processNewAd",
     "logs": "firebase functions:log"
   },
   "engines": {

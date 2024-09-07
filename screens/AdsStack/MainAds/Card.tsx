@@ -18,7 +18,7 @@ function Card({
   onPressNavigateToSellingForm,
   ...props
 }: CardProps) {
-  const { getUserAdUrl } = useUserAds();
+  const { getAdsImage } = useUserAds();
   const [deleteBox, setDeletebox] = useState(false);
   const [opacity, setopacity] = useState(1);
   const [image, setImage] = useState<string>();
@@ -26,7 +26,7 @@ function Card({
   useEffect(() => {
     let cancel = false;
     if (Array.isArray(props?.images) && props.images.length > 0) {
-      getUserAdUrl(props.images[0].original).then((userAdUrl) => {
+      getAdsImage(props.id, props.images[0].id).then((userAdUrl) => {
         if (!cancel && userAdUrl) {
           setImage(userAdUrl);
         }

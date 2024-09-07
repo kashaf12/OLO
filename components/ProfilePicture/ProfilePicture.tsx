@@ -22,7 +22,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({ size = 90, style, local
         setImageUrl(localImageUrl);
       } else if (user?.isProfilePicAvailable) {
         try {
-          if (user?.profilePhotoThumbnail && user?.profilePhotoOriginal) {
+          if (user?.profilePhotoThumbnail || user?.profilePhotoOriginal) {
             setImageUrl(user.profilePhotoThumbnail || user?.profilePhotoOriginal || null);
           } else {
             const urls = await getProfileImage();

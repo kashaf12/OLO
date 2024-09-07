@@ -10,7 +10,7 @@ import { AddFilter, EmptyButton, TextDefault } from '@/components';
 import { COLORS } from '@/constants';
 import { alignment, scale } from '@/utils';
 
-function Ads({ refetch, onPressStartSelling, userListedAds }: AdsProps) {
+function Ads({ refetch, onPressStartSelling, userListedAds, isLoadingAds = false }: AdsProps) {
   const [visible, setVisible] = useState(false);
   const [filter, setFilter] = useState({
     value: 'ALL',
@@ -80,20 +80,8 @@ function Ads({ refetch, onPressStartSelling, userListedAds }: AdsProps) {
         ListHeaderComponent={header}
         keyExtractor={(item) => item.id}
         stickyHeaderIndices={[0]}
-        refreshControl={
-          <RefreshControl
-            // colors={COLORS.spinnerColor}
-            refreshing={false}
-            onRefresh={() => {
-              //   if (networkStatus === 7) {
-              refetch();
-              //   }
-            }}
-          />
-        }
+        refreshControl={<RefreshControl refreshing={isLoadingAds} onRefresh={refetch} />}
         renderItem={({ item }) => {
-          console.log(item);
-
           return (
             <Card
               {...item}

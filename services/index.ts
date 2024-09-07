@@ -9,9 +9,8 @@ import {
   getAdById,
   updateAdLocation,
   changeAdStatus,
-  listenToUserAds,
   getAdImageUrl,
-} from './userAdsService';
+} from './adsService';
 import {
   getUserInfo,
   getProfilePhotoUrls,
@@ -35,7 +34,6 @@ export {
   deleteAd,
   getAdById,
   getUserAds,
-  listenToUserAds,
   updateAd,
   updateAdLocation,
   createAdWithImages,

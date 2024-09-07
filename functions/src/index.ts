@@ -163,3 +163,133 @@ export const generateResizedJpegOnUpload = functions.storage.object().onFinalize
 
   logger.log('Finished execution of generateResizedJpegOnUpload');
 });
+
+/**
+ * Cloud Function triggered when a new ad is created in Firestore.
+ * This function performs multiple operations:
+ * 1. Increments the user's total ad count and updates last posted ad timestamp
+ * 2. Initially marks the new ad as "pending"
+ * 3. Analyzes ad images using Vertex AI
+ * 4. Based on analysis results, either marks the ad as "active" or "rejected"
+ * 5. If marked as active, increments the user's active ad count
+ *
+ * @param {functions.firestore.DocumentSnapshot} snap - The snapshot of the newly created ad document
+ * @param {functions.EventContext} context - The event context
+ * @throws {Error} If the user document doesn't exist or if there's an error in processing
+ */
+export const processNewAd = functions.firestore
+  .document('Ads/{adId}')
+  .onCreate(async (snap, context) => {
+    const newAd = snap.data();
+    const adId = context.params.adId;
+    const userId = newAd.userId;
+
+    logger.info(`Initiating processing for new ad ${adId} created by user ${userId}`);
+
+    const db = admin.firestore();
+    const userRef = db.collection('User').doc(userId);
+    const adRef = db.collection('Ads').doc(adId);
+
+    try {
+      await db.runTransaction(async (transaction) => {
+        logger.debug(`Starting initial transaction for ad ${adId}`);
+
+        const userDoc = await transaction.get(userRef);
+        if (!userDoc.exists) {
+          throw new Error(`User document not found for userId: ${userId}`);
+        }
+
+        const currentStats = userDoc.data()?.stats || {};
+        const newTotalAds = (currentStats.totalAds || 0) + 1;
+
+        transaction.update(userRef, {
+          'stats.totalAds': newTotalAds,
+          'stats.lastPostedAd': FieldValue.serverTimestamp(),
+        });
+        logger.info(`Updated user ${userId} stats: totalAds=${newTotalAds}`);
+
+        transaction.update(adRef, {
+          status: 'pending',
+          message: 'Ad is pending review',
+          updatedAt: FieldValue.serverTimestamp(),
+        });
+        logger.debug(`Marked ad ${adId} as pending for review`);
+      });
+
+      logger.info(`Starting Vertex AI analysis for ad ${adId}`);
+      const imageAnalysisResults = await analyzeImagesWithVertexAI();
+      logger.debug(
+        `Vertex AI analysis completed for ad ${adId}: ${JSON.stringify(imageAnalysisResults)}`
+      );
+
+      await db.runTransaction(async (transaction) => {
+        logger.debug(`Starting post-analysis transaction for ad ${adId}`);
+
+        if (!imageAnalysisResults.success) {
+          transaction.update(adRef, {
+            status: 'rejected',
+            message: 'Ad rejected due to content policy violation',
+            aiAnalysisResults: imageAnalysisResults,
+            updatedAt: FieldValue.serverTimestamp(),
+          });
+          logger.warn(`Ad ${adId} rejected due to failed image analysis`);
+          return;
+        }
+
+        const userDoc = await transaction.get(userRef);
+        const currentStats = userDoc.data()?.stats || {};
+        const newActiveAds = (currentStats.activeAds || 0) + 1;
+
+        transaction.update(userRef, {
+          'stats.activeAds': newActiveAds,
+        });
+        logger.info(`Updated user ${userId} stats: activeAds=${newActiveAds}`);
+
+        transaction.update(adRef, {
+          status: 'active',
+          message: 'Ad successfully published',
+          aiAnalysisResults: imageAnalysisResults,
+          updatedAt: FieldValue.serverTimestamp(),
+        });
+        logger.info(`Ad ${adId} marked as active with AI analysis results`);
+      });
+
+      logger.info(`Successfully completed processing for ad ${adId}`);
+    } catch (error) {
+      logger.error(`Error occurred while processing ad ${adId}:`, error);
+      if (error instanceof Error) {
+        await adRef.update({
+          status: 'rejected',
+          message: `Ad processing failed: ${error.message}`,
+          updatedAt: FieldValue.serverTimestamp(),
+        });
+        logger.warn(`Updated ad ${adId} status to 'rejected' due to error: ${error.message}`);
+      }
+    }
+  });
+
+/**
+ * Analyzes an array of image URLs using Vertex AI.
+ * This is a placeholder function and should be replaced with actual Vertex AI implementation.
+ *
+ * @param {string[]} images - Array of image URLs to analyze
+ * @returns {Promise<{success: boolean, message: string, [key: string]: any}>} The analysis results from Vertex AI
+ */
+async function analyzeImagesWithVertexAI(): Promise<{
+  success: boolean;
+  message: string;
+  [key: string]: any;
+}> {
+  logger.debug(`Initiating Vertex AI analysis`);
+
+  // Simulating analysis delay and process
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  // Placeholder return value - replace with actual Vertex AI logic
+  return {
+    success: true,
+    message: 'Image analysis completed successfully',
+    contentSafe: true,
+    // Add more fields based on your actual Vertex AI implementation
+  };
+}

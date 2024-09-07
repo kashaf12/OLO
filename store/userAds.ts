@@ -1,60 +1,6 @@
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { create } from 'zustand';
 
-export interface LocationType {
-  latitude: number;
-  longitude: number;
-  city: string;
-  country: string;
-  district: string;
-  isoCountryCode: string;
-  postalCode: string;
-  region: string;
-  street: string;
-  streetNumber: string;
-  subregion: string;
-  timezone: string;
-}
-
-export interface ImageType {
-  id: string;
-  name: string;
-  original: string;
-  thumbnails?: string[];
-}
-
-export type StatusType =
-  | 'created'
-  | 'pending'
-  | 'approved'
-  | 'rejected'
-  | 'deactivated'
-  | 'active'
-  | 'sold';
-
-export interface AiCheckResultType {
-  passed: boolean;
-  flags: string[];
-}
-
-export interface AdType {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  category: string;
-  condition?: string;
-  location: LocationType;
-  images: ImageType[];
-  status: StatusType;
-  createdAt: FirebaseFirestoreTypes.FieldValue;
-  updatedAt: FirebaseFirestoreTypes.FieldValue;
-  views: number;
-  likesCount: number;
-  reviewedAt?: FirebaseFirestoreTypes.FieldValue;
-  reviewNotes?: string;
-  aiCheckResult?: AiCheckResultType;
-}
+import { AdType } from './ads';
 
 interface UserAdsState {
   ads: AdType[];

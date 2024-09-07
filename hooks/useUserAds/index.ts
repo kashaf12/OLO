@@ -1,3 +1,3 @@
-import { useInitializeUserAds, useUserAds } from './useUserAds';
+import { useUserAds } from './useUserAds';
 
-export { useInitializeUserAds, useUserAds };
+export { useUserAds };

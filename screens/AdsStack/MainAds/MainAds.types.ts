@@ -1,9 +1,10 @@
-import { AdType } from '@/store/userAds';
+import { AdType } from '@/store/ads';
 
 export type AdsProps = {
   refetch: () => void;
   onPressStartSelling: () => void;
   userListedAds?: AdType[];
+  isLoadingAds?: boolean;
 };
 
 export type CardProps = {

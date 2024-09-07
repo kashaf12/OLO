@@ -1,7 +1,7 @@
 import { useAuth, useInitializeAuth } from './useAuth';
 import useLocationPermission from './useLocationPermission';
 import { useUser, useInitializeUser } from './useUser';
-import { useInitializeUserAds, useUserAds } from './useUserAds';
+import { useUserAds } from './useUserAds';
 
 export {
   useLocationPermission,
@@ -9,6 +9,5 @@ export {
   useInitializeAuth,
   useUser,
   useInitializeUser,
-  useInitializeUserAds,
   useUserAds,
 };

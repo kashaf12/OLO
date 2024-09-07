@@ -25,6 +25,7 @@ The Firebase Functions in this project provide serverless backend functionality 
 - Automatic user document creation upon sign-up
 - Image resizing for uploaded photos
 - Utility functions for path matching and metadata conversion
+- Processing and validation of new ad listings
 
 ## Project Structure
 
@@ -89,6 +90,16 @@ export const generateResizedJpegOnUpload = functions.storage.object().onFinalize
 });
 ```
 
+### 3. processNewAd
+
+This function is triggered when a new ad document is created in Firestore. It performs several operations:
+
+1. Increments the user's total ad count and updates the last posted ad timestamp
+2. Initially marks the new ad as "pending"
+3. Analyzes ad images using Vertex AI
+4. Based on analysis results, either marks the ad as "active" or "rejected"
+5. If marked as active, increments the user's active ad count
+
 ## Utility Functions
 
 The `util.ts` file contains utility functions:
@@ -96,6 +107,10 @@ The `util.ts` file contains utility functions:
 1. `startsWithArray`: Checks if a given image path starts with any of the provided user input paths.
 2. `countNegativeTraversals`: Counts the number of negative directory traversals in a path.
 3. `convertToObjectMetadata`: Converts a FileMetadata object to an ObjectMetadata object.
+
+### analyzeImagesWithVertexAI
+
+A placeholder function for integrating with Vertex AI to analyze ad images. This function should be replaced with actual Vertex AI implementation.
 
 ## Image Processing
 
