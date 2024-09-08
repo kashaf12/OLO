@@ -10,7 +10,14 @@ import { AddFilter, EmptyButton, TextDefault } from '@/components';
 import { COLORS } from '@/constants';
 import { alignment, scale } from '@/utils';
 
-function Ads({ refetch, onPressStartSelling, userListedAds, isLoadingAds = false }: AdsProps) {
+function Ads({
+  refetch,
+  onPressStartSelling,
+  userListedAds,
+  isLoadingAds = false,
+  onChangeStatus,
+  onDeleteAd,
+}: AdsProps) {
   const [visible, setVisible] = useState(false);
   const [filter, setFilter] = useState({
     value: 'ALL',
@@ -87,6 +94,8 @@ function Ads({ refetch, onPressStartSelling, userListedAds, isLoadingAds = false
               {...item}
               onPressNavigateToPrductDescription={console.log}
               onPressNavigateToSellingForm={console.log}
+              onChangeStatus={(s) => onChangeStatus?.(item.id, s)}
+              onDeleteAd={() => onDeleteAd?.(item.id)}
             />
           );
         }}

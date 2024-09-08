@@ -1,41 +1,28 @@
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { Platform, View, Image } from 'react-native';
+import React, { useState } from 'react';
+import { Platform, View } from 'react-native';
 import { BaseButton, BorderlessButton, RectButton } from 'react-native-gesture-handler';
 
 import { CardProps } from './MainAds.types';
 import styles from './styles';
 
 import { FlashMessage, TextDefault } from '@/components';
+import AdImage from '@/components/AdImage/AdImage';
 import { COLORS } from '@/constants';
-import { useUserAds } from '@/hooks';
+import { StatusType } from '@/store/ads';
 import { alignment, scale } from '@/utils';
 
 function Card({
   onPressNavigateToPrductDescription,
   onPressNavigateToSellingForm,
+  onChangeStatus,
+  onDeleteAd,
   ...props
 }: CardProps) {
-  const { getAdsImage } = useUserAds();
   const [deleteBox, setDeletebox] = useState(false);
   const [opacity, setopacity] = useState(1);
-  const [image, setImage] = useState<string>();
-
-  useEffect(() => {
-    let cancel = false;
-    if (Array.isArray(props?.images) && props.images.length > 0) {
-      getAdsImage(props.id, props.images[0].id).then((userAdUrl) => {
-        if (!cancel && userAdUrl) {
-          setImage(userAdUrl);
-        }
-      });
-    }
-    return () => {
-      cancel = true;
-    };
-  }, []);
 
   function onBoxToggle() {
     setDeletebox((prev) => !prev);
@@ -48,14 +35,17 @@ function Card({
     }
   }
 
-  function updateStatus(status: string) {
+  function deleteAd() {
+    if (props.status === 'active') {
+      onChangeStatus?.('deactivated');
+    }
+
+    onDeleteAd?.();
+  }
+
+  function updateStatus(status: StatusType) {
     if (props.status !== status) {
-      //   mutate({
-      //     variables: {
-      //       id: props._id,
-      //       status: status,
-      //     },
-      //   });
+      onChangeStatus?.(status);
     } else {
       FlashMessage({ message: 'No Change in status' });
     }
@@ -67,9 +57,8 @@ function Card({
     else setopacity(1);
   }
 
-  function getDate(date: FirebaseFirestoreTypes.FieldValue) {
-    const formatDate = moment(date).format('DD MMM YYYY');
-    return formatDate;
+  function getDate(date: FirebaseFirestoreTypes.Timestamp) {
+    return moment(date).format('DD MMM YYYY');
   }
 
   function editAd() {
@@ -114,29 +103,29 @@ function Card({
               style={[styles.flex, alignment.PLsmall, {}]}>
               {'From: '}{' '}
               <TextDefault small bold>
-                {getDate(props.createdAt)}
+                {getDate(props.createdAt as FirebaseFirestoreTypes.Timestamp)}
               </TextDefault>
-              {/* {' -To: '} <TextDefault bold small>{props.endingDate}</TextDefault> */}
+              {props.status === 'deactivated' && (
+                <>
+                  {' -To: '}{' '}
+                  <TextDefault bold small>
+                    {getDate(props.endingAt as FirebaseFirestoreTypes.Timestamp)}
+                  </TextDefault>
+                </>
+              )}
             </TextDefault>
-            {/* {!loading ? ( */}
             <BorderlessButton style={alignment.PxSmall} onPress={onBoxToggle}>
               <MaterialCommunityIcons name="dots-vertical" size={scale(20)} color="black" />
             </BorderlessButton>
-            {/* ) : ( */}
-            {/* <Spinner
-                style={{ alignItems: 'flex-end', ...alignment.PxSmall }}
-                spinnerColor={COLORS.spinnerColor1}
-                size="small"
-                backColor="transparent"
-              /> */}
-            {/* )} */}
           </View>
 
           <View style={[styles.InfoContainer, { zIndex: 0 }]}>
-            <Image
-              source={{ uri: image }}
+            <AdImage
+              adId={props.id}
+              imageId={props.images[0].id}
+              variant="cover"
+              size={150}
               style={styles.imgResponsive}
-              defaultSource={require('@/assets/default.png')}
             />
             <View style={[styles.flex, styles.descriptionContainer]}>
               <View>
@@ -183,6 +172,7 @@ function Card({
               ]}>
               <TextDefault
                 textColor={
+                  props.status === 'created' ||
                   props.status === 'pending' ||
                   props.status === 'sold' ||
                   props.status === 'deactivated'
@@ -221,30 +211,38 @@ function Card({
                 top: scale(30),
                 zIndex: 1,
               }}>
-              <RectButton disallowInterruption={false} style={alignment.Psmall} onPress={editAd}>
-                <TextDefault H5 bold uppercase>
-                  Edit
-                </TextDefault>
-              </RectButton>
-              <RectButton style={alignment.Psmall} onPress={() => updateStatus('DELETE')}>
-                <TextDefault H5 bold uppercase>
-                  Delete
-                </TextDefault>
-              </RectButton>
-              <RectButton
-                style={alignment.Psmall}
-                onPress={() =>
-                  updateStatus(props.status === 'deactivated' ? 'active' : 'deactivated')
-                }>
-                <TextDefault H5 bold uppercase>
-                  {props.status === 'deactivated' ? 'Activate' : 'Deactivate'}
-                </TextDefault>
-              </RectButton>
-              <RectButton style={alignment.Psmall} onPress={() => updateStatus('sold')}>
-                <TextDefault H5 bold uppercase>
-                  Mark as sold
-                </TextDefault>
-              </RectButton>
+              {['deactivated'].includes(props.status) && (
+                <RectButton disallowInterruption={false} style={alignment.Psmall} onPress={editAd}>
+                  <TextDefault H5 bold uppercase>
+                    Edit
+                  </TextDefault>
+                </RectButton>
+              )}
+              {['sold', 'deactivated'].includes(props.status) && (
+                <RectButton style={alignment.Psmall} onPress={deleteAd}>
+                  <TextDefault H5 bold uppercase>
+                    Delete
+                  </TextDefault>
+                </RectButton>
+              )}
+              {['active', 'deactivated'].includes(props.status) && (
+                <RectButton
+                  style={alignment.Psmall}
+                  onPress={() =>
+                    updateStatus(props.status === 'deactivated' ? 'active' : 'deactivated')
+                  }>
+                  <TextDefault H5 bold uppercase>
+                    {props.status === 'deactivated' ? 'Activate' : 'Deactivate'}
+                  </TextDefault>
+                </RectButton>
+              )}
+              {['active', 'deactivated'].includes(props.status) && (
+                <RectButton style={alignment.Psmall} onPress={() => updateStatus('sold')}>
+                  <TextDefault H5 bold uppercase>
+                    Mark as sold
+                  </TextDefault>
+                </RectButton>
+              )}
             </View>
           )}
         </BaseButton>

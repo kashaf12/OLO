@@ -11,6 +11,7 @@ import {
   getAdImageUrl,
   createAdWithImages,
 } from '@/services';
+import { getAdCoverUrl, getAdThumbnailUrl } from '@/services/adsService';
 import { useAuthStore, useUserAdsStore } from '@/store';
 import { AdType, ImageType, LocationType } from '@/store/ads';
 
@@ -162,14 +163,16 @@ export const useUserAds = () => {
     [user, setIsLoading, setError]
   );
 
-  const getAdsImage = useCallback(async (adId: string, imageId: string): Promise<string | null> => {
-    try {
-      return await getAdImageUrl(adId, imageId);
-    } catch (error) {
-      console.error('Error fetching ad image URL:', error);
-      return null;
-    }
-  }, []);
+  const getAdsImage = useCallback(
+    async (adId: string, imageId: string): Promise<(string | null)[]> => {
+      return Promise.all([
+        getAdThumbnailUrl(adId, imageId),
+        getAdCoverUrl(adId, imageId),
+        getAdImageUrl(adId, imageId),
+      ]);
+    },
+    []
+  );
 
   return {
     ads,

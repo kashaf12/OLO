@@ -11,6 +11,7 @@
     "deploy:createUserDocumentOnSignUp": "firebase deploy --only functions:createUserDocumentOnSignUp",
     "deploy:generateResizedJpegOnUpload": "firebase deploy --only functions:generateResizedJpegOnUpload",
     "deploy:processNewAd": "firebase deploy --only functions:processNewAd",
+    "deploy:deleteAd": "firebase deploy --only functions:deleteAd",
     "logs": "firebase functions:log"
   },
   "engines": {

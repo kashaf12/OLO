@@ -293,3 +293,105 @@ async function analyzeImagesWithVertexAI(): Promise<{
     // Add more fields based on your actual Vertex AI implementation
   };
 }
+
+/**
+ * Cloud Function to handle ad deletion, including related image removal and user stats update.
+ *
+ * This function is triggered when a document in the 'Ads' collection is deleted.
+ * It performs the following tasks:
+ * 1. Deletes all images associated with the ad from Firebase Storage.
+ * 2. Decrements the totalAds count in the user's document in Firestore.
+ *
+ * @param {functions.firestore.QueryDocumentSnapshot} snapshot - The snapshot of the deleted document
+ * @param {functions.EventContext} context - The event context
+ */
+export const deleteAd = functions.firestore
+  .document('Ads/{adId}')
+  .onDelete(async (snapshot, context) => {
+    const adId = context.params.adId;
+    const adData = snapshot.data();
+
+    if (!adData) {
+      logger.warn(`No data found for ad ${adId}`);
+      return;
+    }
+
+    const userId = adData.userId;
+    logger.info(`Processing deletion for ad ${adId} of user ${userId}`);
+
+    try {
+      await deleteAdImages(adId, adData.images);
+      await decrementUserTotalAds(userId);
+
+      logger.info(`Successfully processed deletion for ad ${adId}`);
+    } catch (error) {
+      logger.error(`Error processing deletion for ad ${adId}:`, error);
+    }
+  });
+
+/**
+ * Deletes all images and their variations associated with an ad from Firebase Storage.
+ *
+ * @param {string} adId - The ID of the ad
+ * @param {Array<{id: string}>} images - Array of image objects containing image IDs
+ */
+async function deleteAdImages(adId: string, images: { id: string }[]) {
+  if (!images || !Array.isArray(images)) {
+    logger.warn(`No images to delete for ad ${adId}`);
+    return;
+  }
+
+  const deletePromises = images.flatMap(async (image) => {
+    const variations = [
+      `ads/${adId}/${image.id}`,
+      `ads/${adId}/${image.id}_1200x1200`,
+      `ads/${adId}/${image.id}_300x300`,
+    ];
+
+    return variations.map(async (imagePath) => {
+      try {
+        await admin.storage().bucket().file(imagePath).delete();
+        logger.info(`Deleted image variation: ${imagePath}`);
+      } catch (error) {
+        // If the file doesn't exist, it's not an error we need to throw
+        if ((error as { code: number }).code === 404) {
+          logger.warn(`Image variation not found (already deleted or never existed): ${imagePath}`);
+        } else {
+          logger.error(`Error deleting image variation ${imagePath}:`, error);
+        }
+      }
+    });
+  });
+
+  await Promise.all(deletePromises.flat());
+  logger.info(`Finished deleting all image variations for ad ${adId}`);
+}
+/**
+ * Decrements the totalAds count in the user's document in Firestore.
+ *
+ * @param {string} userId - The ID of the user
+ */
+async function decrementUserTotalAds(userId: string) {
+  const userRef = db.collection('User').doc(userId);
+
+  try {
+    await db.runTransaction(async (transaction) => {
+      const userDoc = await transaction.get(userRef);
+      if (!userDoc.exists) {
+        throw new Error('User document does not exist');
+      }
+      const userData = userDoc.data();
+      if (!userData) {
+        throw new Error('User data is undefined');
+      }
+      const currentTotalAds = userData.stats?.totalAds || 0;
+      transaction.update(userRef, {
+        'stats.totalAds': Math.max(currentTotalAds - 1, 0),
+      });
+    });
+    logger.info(`Decremented totalAds for user ${userId}`);
+  } catch (error) {
+    logger.error(`Error decrementing totalAds for user ${userId}:`, error);
+    throw error; // Re-throw to be caught by the main try-catch block
+  }
+}

@@ -40,6 +40,7 @@ export interface AdType {
   status: StatusType;
   createdAt: FirebaseFirestoreTypes.FieldValue;
   updatedAt: FirebaseFirestoreTypes.FieldValue;
+  endingAt: FirebaseFirestoreTypes.FieldValue;
   views: number;
   likesCount: number;
   reviewedAt?: FirebaseFirestoreTypes.FieldValue;
